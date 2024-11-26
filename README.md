@@ -1,10 +1,10 @@
 # proyecto_gimnasio_IW
 
-## Herramientas que vamos a usar
+## Herramientas
 
 ### Frontend
 Vue
 
-## Backend
+### Backend
 Spring
 BD -> Postgresql
