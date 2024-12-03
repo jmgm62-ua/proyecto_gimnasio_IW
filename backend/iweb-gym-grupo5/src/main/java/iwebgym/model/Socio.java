@@ -6,9 +6,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Data
 @Table(name = "socios")
-public class Socio extends User{
+public class Socio extends User {
     private String tipoCuota;
     private String fechaAlta;
     private String fechaBaja;
