@@ -2,8 +2,12 @@ package iwebgym.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "socios")
@@ -12,6 +16,10 @@ public class Socio extends User {
     private String fechaAlta;
     private String fechaBaja;
     private float Saldo;
+
+    @Getter
+    @OneToMany(mappedBy = "socio")
+    private List<Reserva> reservas;
 
     public Socio() {
     }
@@ -23,5 +31,4 @@ public class Socio extends User {
         this.fechaBaja = fechaBaja;
         this.Saldo = Saldo;
     }
-
 }

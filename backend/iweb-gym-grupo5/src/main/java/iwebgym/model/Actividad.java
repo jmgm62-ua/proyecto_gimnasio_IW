@@ -2,9 +2,11 @@ package iwebgym.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,6 +32,9 @@ public class Actividad {
     @JoinColumn(name = "tipo_actividad_id")
     private TipoActividad tipoActividad;
 
+    @Getter
+    @OneToMany(mappedBy = "actividad")
+    private List<Reserva> reservas;
 
     public Actividad() {
     }
