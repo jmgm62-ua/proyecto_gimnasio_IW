@@ -16,6 +16,6 @@ public class Instalacion {
     private String nombre;
 
     @OneToMany(mappedBy = "instalacion", cascade = CascadeType.ALL)
-    private List<Reserva> reservas;
+    private List<Reserva_instalacion> reservaInstalacions;
 
 }

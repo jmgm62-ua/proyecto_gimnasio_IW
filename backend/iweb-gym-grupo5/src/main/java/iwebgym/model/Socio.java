@@ -20,7 +20,7 @@ public class Socio extends User {
     private Suscripcion inscripcion;
 
     @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL)
-    private List<Reserva> reservas;
+    private List<Reserva_instalacion> reservaInstalacions;
 
     // Constructor vacío
     public Socio() {
