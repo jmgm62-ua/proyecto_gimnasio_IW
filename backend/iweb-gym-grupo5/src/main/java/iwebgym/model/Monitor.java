@@ -9,7 +9,7 @@ import lombok.Data;
 @Table(name = "monitores")
 public class Monitor extends User{
 
-    @OneToMany(mappedBy = "instalaciones", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "monitor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Actividad> actividades;
 
     public List<Actividad> getActividades(){
