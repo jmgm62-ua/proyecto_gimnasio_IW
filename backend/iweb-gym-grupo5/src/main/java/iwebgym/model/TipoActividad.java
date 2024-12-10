@@ -13,7 +13,7 @@ public class TipoActividad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private EnumNombreActividad nombre;
+    private String nombre;
 
     private double precioExtra;
 
@@ -23,7 +23,7 @@ public class TipoActividad {
     public TipoActividad() {
     }
 
-    public TipoActividad(EnumNombreActividad nombre, double precioExtra) {
+    public TipoActividad(String nombre, double precioExtra) {
         this.nombre = nombre;
         this.precioExtra = precioExtra;
     }
