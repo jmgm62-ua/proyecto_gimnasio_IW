@@ -2,6 +2,9 @@ package iwebgym.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -15,6 +18,7 @@ public class Socio extends User {
     private String fechaBaja;
     private float Saldo;
 
+<<<<<<< HEAD
     @ManyToOne
     @JoinColumn(name = "inscripcion_id")
     private Suscripcion inscripcion;
@@ -22,7 +26,10 @@ public class Socio extends User {
     @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL)
     private List<Reserva_instalacion> reservaInstalacions;
 
-    // Constructor vacío
+    @Getter
+    @OneToMany(mappedBy = "socio")
+    private List<Reserva> reservas;
+
     public Socio() {
     }
 
@@ -34,5 +41,4 @@ public class Socio extends User {
         this.fechaBaja = fechaBaja;
         this.Saldo = Saldo;
     }
-
 }
