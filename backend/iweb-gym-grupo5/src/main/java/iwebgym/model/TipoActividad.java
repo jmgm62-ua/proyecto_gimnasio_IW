@@ -32,4 +32,26 @@ public class TipoActividad {
         this.actividades.add(actividad);
     }
 
+    public void removeActividades(Actividad actividad) {
+        this.actividades.remove(actividad);
+    }
+
+    public String ObtenerNombreById(int id) {
+        switch (id) {
+            case 0:
+                return "Spinning";
+
+            case 1:
+                return "Crossfit";
+
+            case 2:
+                return "Pilates";
+
+            case 3:
+                return "HIIT";
+            default:
+                return "No existe";
+        }
+    }
+
 }
