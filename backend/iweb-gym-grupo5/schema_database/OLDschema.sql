@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.18 (Debian 13.18-1.pgdg120+1)
--- Dumped by pg_dump version 13.18 (Debian 13.18-1.pgdg120+1)
+-- Dumped from database version 13.16 (Debian 13.16-1.pgdg120+1)
+-- Dumped by pg_dump version 13.16 (Debian 13.16-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -32,8 +32,7 @@ CREATE TABLE public.actividades (
     hora_fin character varying(255),
     hora_inicio character varying(255),
     nombre character varying(255),
-    tipo_actividad_id bigint,
-    monitor_id bigint
+    tipo_actividad_id bigint
 );
 
 
@@ -353,14 +352,6 @@ ALTER TABLE ONLY public.web_masters
 
 ALTER TABLE ONLY public.webmaster_actividad
     ADD CONSTRAINT webmaster_actividad_pkey PRIMARY KEY (webmaster_id, actividad_id);
-
-
---
--- Name: actividades fk3f9k2i70i3qq5qdbrejyosjw; Type: FK CONSTRAINT; Schema: public; Owner: iw
---
-
-ALTER TABLE ONLY public.actividades
-    ADD CONSTRAINT fk3f9k2i70i3qq5qdbrejyosjw FOREIGN KEY (monitor_id) REFERENCES public.monitores(id);
 
 
 --
