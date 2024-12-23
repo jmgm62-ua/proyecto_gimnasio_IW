@@ -36,26 +36,23 @@ public class LoginController {
 
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute LoginData loginData, Model model, HttpSession session) {
-
-        // Llamada al servicio para comprobar si el login es correcto
         UserService.LoginStatus loginStatus = usuarioService.login(loginData.geteMail(), loginData.getPassword());
 
         if (loginStatus == UserService.LoginStatus.LOGIN_OK) {
             UserData usuario = usuarioService.findByEmail(loginData.geteMail());
-
             managerUserSession.logearUsuario(usuario.getId());
-           /* if(usuario.getAdmin() == true){
-                return "redirect:/registrados";
-            }*/
+
+            if ("XMLHttpRequest".equals(session.getAttribute("X-Requested-With"))) {
+                return "{\"redirect\":\"/usuarios/" + usuario.getId() + "/tareas\"}";
+            }
 
             return "redirect:/usuarios/" + usuario.getId() + "/tareas";
         } else if (loginStatus == UserService.LoginStatus.USER_NOT_FOUND) {
-            model.addAttribute("error", "No existe usuario");
-            return "formLogin";
+            return "{\"error\":\"No existe usuario\"}";
         } else if (loginStatus == UserService.LoginStatus.ERROR_PASSWORD) {
-            model.addAttribute("error", "Contraseña incorrecta");
-            return "formLogin";
+            return "{\"error\":\"Contraseña incorrecta\"}";
         }
-        return "formLogin";
+        return "{\"error\":\"Error desconocido\"}";
     }
+
 }
