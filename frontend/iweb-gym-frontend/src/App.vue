@@ -1,86 +1,116 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div id="app">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Gimnasio FIT</a>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#instalaciones">Instalaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#tarifas">Tarifas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#hazte-socio">Hazte Socio</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-      </nav>
+    <!-- Main Content -->
+    <div class="content-wrapper">
+      <RouterView />
     </div>
-  </header>
 
-  <RouterView />
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-auto">
+      <div class="container text-center">
+        <p>&copy; 2024 Gimnasio FIT. Todos los derechos reservados.</p>
+        <a href="/politica-privacidad" class="text-white">Política de Privacidad</a>
+      </div>
+    </footer>
+  </div>
 </template>
 
+<script>
+export default {
+  name: "App",
+};
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+/* Navbar styles */
+.navbar {
+  z-index: 1000;
+  border-bottom: 2px solid #333;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.container-fluid {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-nav {
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-link {
+  font-size: 1.2rem;
+}
+
+/* Content wrapper style */
+.content-wrapper {
+  flex: 1;
+  background-color: #f8f9fa; /* Light background color for content */
+  padding-top: 80px; /* Give some space under navbar */
+  padding-bottom: 60px; /* Space above footer */
+  min-height: 100vh;
+  border: 2px solid #007bff; /* Border to distinguish the content */
+  margin: 0 20px;
+}
+
+/* Footer styles */
+footer {
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  position: relative;
+  bottom: 0;
+  left: 0;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+footer {
+  border-top: 2px solid #333;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+footer a {
+  color: white;
+  text-decoration: none;
 }
 
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+footer a:hover {
+  text-decoration: underline;
 }
 </style>
