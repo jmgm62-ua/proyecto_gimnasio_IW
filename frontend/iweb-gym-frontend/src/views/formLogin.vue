@@ -23,7 +23,9 @@
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
-      <button type="submit" class="btn">Iniciar Sesión</button>
+      <button type="submit" class="btn" :disabled="isLoading">
+        {{ isLoading ? 'Cargando...' : 'Iniciar Sesión' }}
+      </button>
     </form>
   </div>
 </template>
@@ -37,31 +39,54 @@ export default {
         password: '',
       },
       errorMessage: '',
+      isLoading: false
     };
   },
   methods: {
     async submitLogin() {
+      this.isLoading = true;
+      this.errorMessage = '';
+
       try {
         const response = await fetch('/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest' // Importante para tu backend
           },
           body: JSON.stringify(this.loginData),
         });
 
+        // Si hay redirección, manejarla
         if (response.redirected) {
-          // Redirigir a la URL proporcionada por el backend
           window.location.href = response.url;
-        } else {
-          const result = await response.json();
-          if (result.error) {
-            this.errorMessage = result.error;
+          return;
+        }
+
+        const data = await response.text();
+        let result;
+        try {
+          result = JSON.parse(data);
+        } catch (e) {
+          // Si la respuesta no es JSON, podría ser una redirección
+          if (data.includes('redirect:')) {
+            const redirectUrl = data.match(/redirect:(.+)}/)[1].replace(/"/g, '');
+            window.location.href = redirectUrl;
+            return;
           }
+          throw new Error('Formato de respuesta no válido');
+        }
+
+        if (result.error) {
+          this.errorMessage = result.error;
+        } else if (result.redirect) {
+          window.location.href = result.redirect;
         }
       } catch (error) {
         this.errorMessage = 'Error de conexión con el servidor.';
-        console.error(error);
+        console.error('Error:', error);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -106,9 +131,15 @@ export default {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
 }
 
 .btn:hover {
   background-color: #0056b3;
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

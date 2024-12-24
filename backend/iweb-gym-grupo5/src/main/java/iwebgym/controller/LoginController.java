@@ -10,9 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
-
+import jakarta.servlet.http.HttpSession;
 @Controller
 
 public class LoginController {
@@ -31,28 +31,31 @@ public class LoginController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginData", new LoginData());
-        return "formLogin";
+        return "hola";
     }
 
     @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute LoginData loginData, Model model, HttpSession session) {
-        UserService.LoginStatus loginStatus = usuarioService.login(loginData.geteMail(), loginData.getPassword());
+    public String loginSubmit(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session) {
+        UserService.LoginStatus loginStatus = usuarioService.login(email, password);
 
-        if (loginStatus == UserService.LoginStatus.LOGIN_OK) {
-            UserData usuario = usuarioService.findByEmail(loginData.geteMail());
-            managerUserSession.logearUsuario(usuario.getId());
+        if (loginStatus == UserService.LoginStatus.LOGIN_OK_SOCIO ||
+                loginStatus == UserService.LoginStatus.LOGIN_OK_MONITOR ||
+                loginStatus == UserService.LoginStatus.LOGIN_OK_WEBMASTER) {
 
-            if ("XMLHttpRequest".equals(session.getAttribute("X-Requested-With"))) {
-                return "{\"redirect\":\"/usuarios/" + usuario.getId() + "/tareas\"}";
+            UserData usuario = usuarioService.findByEmail(email);
+            if (usuario != null) {
+                managerUserSession.logearUsuario(usuario.getId());
+            } else {
+                model.addAttribute("error", "Error interno: usuario no encontrado tras autenticación.");
             }
-
-            return "redirect:/usuarios/" + usuario.getId() + "/tareas";
         } else if (loginStatus == UserService.LoginStatus.USER_NOT_FOUND) {
-            return "{\"error\":\"No existe usuario\"}";
+            model.addAttribute("error", "No existe usuario");
         } else if (loginStatus == UserService.LoginStatus.ERROR_PASSWORD) {
-            return "{\"error\":\"Contraseña incorrecta\"}";
+            model.addAttribute("error", "Contraseña incorrecta");
         }
-        return "{\"error\":\"Error desconocido\"}";
+        return loginStatus.toString();
     }
+
+
 
 }
