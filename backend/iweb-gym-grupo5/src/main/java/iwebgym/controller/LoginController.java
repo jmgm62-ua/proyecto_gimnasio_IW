@@ -5,16 +5,19 @@ import iwebgym.dto.LoginData;
 import iwebgym.dto.UserData;
 import iwebgym.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
-@Controller
 
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController  // Cambiar @Controller por @RestController
+@CrossOrigin(origins = "http://localhost:5173") // Asumiendo que Vue corre en el puerto 5173
 public class LoginController {
 
     @Autowired
@@ -34,28 +37,26 @@ public class LoginController {
         return "hola";
     }
 
-    @PostMapping("/login")
-    public String loginSubmit(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session) {
-        UserService.LoginStatus loginStatus = usuarioService.login(email, password);
+    @PostMapping("/api/login")
+    public ResponseEntity<?> loginSubmit(@RequestBody LoginData loginData) {
+        Map<String, Object> response = new HashMap<>();
 
-        if (loginStatus == UserService.LoginStatus.LOGIN_OK_SOCIO ||
-                loginStatus == UserService.LoginStatus.LOGIN_OK_MONITOR ||
-                loginStatus == UserService.LoginStatus.LOGIN_OK_WEBMASTER) {
+        UserService.LoginStatus loginStatus = usuarioService.login(loginData.getEmail(), loginData.getPassword());
 
-            UserData usuario = usuarioService.findByEmail(email);
-            if (usuario != null) {
-                managerUserSession.logearUsuario(usuario.getId());
-            } else {
-                model.addAttribute("error", "Error interno: usuario no encontrado tras autenticación.");
-            }
-        } else if (loginStatus == UserService.LoginStatus.USER_NOT_FOUND) {
-            model.addAttribute("error", "No existe usuario");
-        } else if (loginStatus == UserService.LoginStatus.ERROR_PASSWORD) {
-            model.addAttribute("error", "Contraseña incorrecta");
+        if (loginStatus == UserService.LoginStatus.USER_NOT_FOUND) {
+            response.put("error", "Usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-        return loginStatus.toString();
+
+        if (loginStatus == UserService.LoginStatus.ERROR_PASSWORD) {
+            response.put("error", "Contraseña incorrecta");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        response.put("status", "success");
+        response.put("userType", loginStatus.toString());
+        return ResponseEntity.ok(response);
     }
-
-
-
 }
+
+

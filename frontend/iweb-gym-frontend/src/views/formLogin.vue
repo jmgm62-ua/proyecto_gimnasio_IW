@@ -7,7 +7,7 @@
         <input
             type="email"
             id="email"
-            v-model="loginData.eMail"
+            v-model="loginData.email"
             required
         />
       </div>
@@ -31,11 +31,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       loginData: {
-        eMail: '',
+        email: '',
         password: '',
       },
       errorMessage: '',
@@ -48,42 +50,37 @@ export default {
       this.errorMessage = '';
 
       try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest' // Importante para tu backend
-          },
-          body: JSON.stringify(this.loginData),
-        });
+        const response = await axios.post('http://localhost:8080/api/login', this.loginData);
 
-        // Si hay redirección, manejarla
-        if (response.redirected) {
-          window.location.href = response.url;
-          return;
-        }
+        // Manejar la respuesta exitosa
+        if (response.data.status === 'success') {
+          // Guardar el tipo de usuario si es necesario
+          localStorage.setItem('userType', response.data.userType);
 
-        const data = await response.text();
-        let result;
-        try {
-          result = JSON.parse(data);
-        } catch (e) {
-          // Si la respuesta no es JSON, podría ser una redirección
-          if (data.includes('redirect:')) {
-            const redirectUrl = data.match(/redirect:(.+)}/)[1].replace(/"/g, '');
-            window.location.href = redirectUrl;
-            return;
+          // Redirigir según el tipo de usuario
+          switch(response.data.userType) {
+            case 'LOGIN_OK_SOCIO':
+              this.$router.push('/socio-dashboard');
+              break;
+            case 'LOGIN_OK_MONITOR':
+              this.$router.push('/monitor-dashboard');
+              break;
+            case 'LOGIN_OK_WEBMASTER':
+              this.$router.push('/admin-dashboard');
+              break;
           }
-          throw new Error('Formato de respuesta no válido');
-        }
-
-        if (result.error) {
-          this.errorMessage = result.error;
-        } else if (result.redirect) {
-          window.location.href = result.redirect;
         }
       } catch (error) {
-        this.errorMessage = 'Error de conexión con el servidor.';
+        if (error.response) {
+          // El servidor respondió con un status fuera del rango 2xx
+          this.errorMessage = error.response.data.error || 'Error en la autenticación';
+        } else if (error.request) {
+          // La petición fue hecha pero no se recibió respuesta
+          this.errorMessage = 'No se pudo conectar con el servidor';
+        } else {
+          // Error en la configuración de la petición
+          this.errorMessage = 'Error al procesar la solicitud';
+        }
         console.error('Error:', error);
       } finally {
         this.isLoading = false;
