@@ -3,13 +3,11 @@ package iwebgym.authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
-
-//REVISAR ESTO
 @Component
 public class ManagerUserSession {
-
+    @Autowired
     HttpSession session;
 
     // Añadimos el id de usuario en la sesión HTTP para hacer

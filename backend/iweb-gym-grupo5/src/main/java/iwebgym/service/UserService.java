@@ -1,8 +1,14 @@
 package iwebgym.service;
 
 import iwebgym.dto.UserData;
+import iwebgym.model.Monitor;
+import iwebgym.model.Socio;
 import iwebgym.model.User;
+import iwebgym.model.WebMaster;
+import iwebgym.repository.MonitorRepository;
+import iwebgym.repository.SocioRepository;
 import iwebgym.repository.UserRepository;
+import iwebgym.repository.WebMasterRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +25,19 @@ public class UserService {
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public enum LoginStatus {LOGIN_OK, USER_NOT_FOUND, ERROR_PASSWORD}
+    public enum LoginStatus {LOGIN_OK_SOCIO,LOGIN_OK_MONITOR,LOGIN_OK_WEBMASTER, USER_NOT_FOUND, ERROR_PASSWORD}
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SocioRepository socioRepository;
+
+    @Autowired
+    private WebMasterRepository webMasterRepository;
+
+    @Autowired
+    private MonitorRepository monitorRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -37,14 +52,37 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public LoginStatus login(String eMail, String password) {
-        Optional<User> usuario = userRepository.findByEmail(eMail);
-        if (!usuario.isPresent()) {
+        System.out.println("Email recibido en loginSubmit: " + eMail);
+        System.out.println("contraseña recibido en loginSubmit: " + password);
+        if (eMail == null || eMail.trim().isEmpty()) {
             return LoginStatus.USER_NOT_FOUND;
-        } else if (!usuario.get().getPassword().equals(password)) {
-            return LoginStatus.ERROR_PASSWORD;
-        } else {
-            return LoginStatus.LOGIN_OK;
         }
+        Optional<Socio> socio = socioRepository.findByEmail(eMail);
+        if (socio.isPresent()) {
+            if (!socio.get().getPassword().equals(password)) {
+                return LoginStatus.ERROR_PASSWORD;
+            } else {
+                return LoginStatus.LOGIN_OK_SOCIO;
+            }
+        }
+        Optional<WebMaster> webMaster = webMasterRepository.findByEmail(eMail);
+        if (webMaster.isPresent()) {
+            if (!webMaster.get().getPassword().equals(password)) {
+                return LoginStatus.ERROR_PASSWORD;
+            } else {
+                return LoginStatus.LOGIN_OK_WEBMASTER;
+            }
+        }
+        Optional<Monitor> monitor = monitorRepository.findByEmail(eMail);
+        if (monitor.isPresent()) {
+            if (!monitor.get().getPassword().equals(password)) {
+                return LoginStatus.ERROR_PASSWORD;
+            } else {
+                return LoginStatus.LOGIN_OK_MONITOR;
+            }
+        }
+
+        return LoginStatus.USER_NOT_FOUND;
     }
 
     @Transactional(readOnly = true)

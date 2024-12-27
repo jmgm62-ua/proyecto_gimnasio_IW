@@ -7,7 +7,7 @@
         <input
             type="email"
             id="email"
-            v-model="loginData.eMail"
+            v-model="loginData.email"
             required
         />
       </div>
@@ -23,45 +23,67 @@
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
-      <button type="submit" class="btn">Iniciar Sesión</button>
+      <button type="submit" class="btn" :disabled="isLoading">
+        {{ isLoading ? 'Cargando...' : 'Iniciar Sesión' }}
+      </button>
     </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       loginData: {
-        eMail: '',
+        email: '',
         password: '',
       },
       errorMessage: '',
+      isLoading: false
     };
   },
   methods: {
     async submitLogin() {
-      try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.loginData),
-        });
+      this.isLoading = true;
+      this.errorMessage = '';
 
-        if (response.redirected) {
-          // Redirigir a la URL proporcionada por el backend
-          window.location.href = response.url;
-        } else {
-          const result = await response.json();
-          if (result.error) {
-            this.errorMessage = result.error;
+      try {
+        const response = await axios.post('http://localhost:8080/api/login', this.loginData);
+
+        // Manejar la respuesta exitosa
+        if (response.data.status === 'success') {
+          // Guardar el tipo de usuario si es necesario
+          localStorage.setItem('userType', response.data.userType);
+
+          // Redirigir según el tipo de usuario
+          switch(response.data.userType) {
+            case 'LOGIN_OK_SOCIO':
+              this.$router.push('/socio-dashboard');
+              break;
+            case 'LOGIN_OK_MONITOR':
+              this.$router.push('/monitor-dashboard');
+              break;
+            case 'LOGIN_OK_WEBMASTER':
+              this.$router.push('/admin-dashboard');
+              break;
           }
         }
       } catch (error) {
-        this.errorMessage = 'Error de conexión con el servidor.';
-        console.error(error);
+        if (error.response) {
+          // El servidor respondió con un status fuera del rango 2xx
+          this.errorMessage = error.response.data.error || 'Error en la autenticación';
+        } else if (error.request) {
+          // La petición fue hecha pero no se recibió respuesta
+          this.errorMessage = 'No se pudo conectar con el servidor';
+        } else {
+          // Error en la configuración de la petición
+          this.errorMessage = 'Error al procesar la solicitud';
+        }
+        console.error('Error:', error);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -106,9 +128,15 @@ export default {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
 }
 
 .btn:hover {
   background-color: #0056b3;
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>
