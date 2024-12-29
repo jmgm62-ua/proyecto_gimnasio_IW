@@ -9,6 +9,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import java.time.LocalDateTime;
+
+import iwebgym.model.TipoActividad;
+import iwebgym.model.Monitor;
+
+
 @Entity
 @Data
 @Table(name = "actividades")
@@ -37,6 +43,7 @@ public class Actividad {
     private List<Reserva> reservas;
 
     @ManyToOne
+    @JoinColumn(name = "monitor_id")
     private Monitor monitor;
 
     public Actividad() {
