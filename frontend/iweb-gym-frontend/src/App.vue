@@ -1,86 +1,100 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Gimnasio FIT</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#instalaciones">Instalaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#tarifas">Tarifas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#hazte-socio">Hazte Socio</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-      </nav>
+    <!-- Main Content -->
+    <div class="content-wrapper">
+      <RouterView />
     </div>
-  </header>
 
-  <RouterView />
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-auto">
+      <div class="container text-center">
+        <p>&copy; 2024 Gimnasio FIT. Todos los derechos reservados.</p>
+        <a href="/politica-privacidad" class="text-white">Política de Privacidad</a>
+      </div>
+    </footer>
+  </div>
 </template>
 
+<script>
+export default {
+  name: "App",
+};
+</script>
+
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+/* Navbar styles */
+.navbar-dark .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.navbar-dark .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  transition: color 0.3s;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.navbar-dark .nav-link:hover {
+  color: white;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.navbar-dark .btn-primary {
+  border-radius: 25px;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+/* Hero styles */
+.hero {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.hero-overlay {
+  z-index: 1;
 }
 
-nav a:first-of-type {
-  border: 0;
+.hero .container {
+  z-index: 2;
+  position: relative;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.card {
+  border: none;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.card-body {
+  padding: 2rem;
 }
 </style>
