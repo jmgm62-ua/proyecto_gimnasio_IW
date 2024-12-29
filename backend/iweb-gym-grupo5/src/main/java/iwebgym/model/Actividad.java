@@ -36,6 +36,9 @@ public class Actividad {
     @OneToMany(mappedBy = "actividad")
     private List<Reserva> reservas;
 
+    @ManyToOne
+    private Monitor monitor;
+
     public Actividad() {
     }
 

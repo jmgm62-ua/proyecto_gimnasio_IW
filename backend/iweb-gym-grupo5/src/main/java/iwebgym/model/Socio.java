@@ -18,7 +18,6 @@ public class Socio extends User {
     private String fechaBaja;
     private float Saldo;
 
-<<<<<<< HEAD
     @ManyToOne
     @JoinColumn(name = "inscripcion_id")
     private Suscripcion inscripcion;
