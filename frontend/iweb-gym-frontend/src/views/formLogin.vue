@@ -5,19 +5,19 @@
       <div class="form-group">
         <label for="email">Correo Electrónico</label>
         <input
-            type="email"
-            id="email"
-            v-model="loginData.email"
-            required
+          type="email"
+          id="email"
+          v-model="loginData.email"
+          required
         />
       </div>
       <div class="form-group">
         <label for="password">Contraseña</label>
         <input
-            type="password"
-            id="password"
-            v-model="loginData.password"
-            required
+          type="password"
+          id="password"
+          v-model="loginData.password"
+          required
         />
       </div>
       <div v-if="errorMessage" class="error-message">
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/userStore'; // Importa el almacén de usuario
 import axios from 'axios';
 
 export default {
@@ -41,7 +42,7 @@ export default {
         password: '',
       },
       errorMessage: '',
-      isLoading: false
+      isLoading: false,
     };
   },
   methods: {
@@ -50,35 +51,44 @@ export default {
       this.errorMessage = '';
 
       try {
+        // Enviar la solicitud de inicio de sesión
         const response = await axios.post('http://localhost:8080/api/login', this.loginData);
 
-        // Manejar la respuesta exitosa
         if (response.data.status === 'success') {
-          // Guardar el tipo de usuario si es necesario
-          localStorage.setItem('userType', response.data.userType);
+          const userStore = useUserStore(); // Accede al almacén de usuario
 
-          // Redirigir según el tipo de usuario
-          switch(response.data.userType) {
-            case 'LOGIN_OK_SOCIO':
-              this.$router.push('/socio-dashboard');
-              break;
-            case 'LOGIN_OK_MONITOR':
-              this.$router.push('/monitor-dashboard');
-              break;
-            case 'LOGIN_OK_WEBMASTER':
-              this.$router.push('/admin-dashboard');
-              break;
+          // Establecer el tipo de usuario
+          userStore.setUserType(response.data.userType);
+          userStore.setIsLoggedIn();
+
+          // Obtener los datos del usuario desde el backend
+          const userResponse = await axios.get(`http://localhost:8080/users/${this.loginData.email}`);
+
+          if (userResponse.status === 200) {
+            // Almacenar los datos del usuario en el store
+            userStore.setUserData(userResponse.data);
+            console.log('Datos del usuario almacenados:', userStore.$state);
+
+            // Redirigir según el tipo de usuario
+            switch (response.data.userType) {
+              case 'LOGIN_OK_SOCIO':
+                this.$router.push('/socio-profile');
+                break;
+              case 'LOGIN_OK_MONITOR':
+                this.$router.push('/monitor-dashboard');
+                break;
+              case 'LOGIN_OK_WEBMASTER':
+                this.$router.push('/admin-dashboard');
+                break;
+            }
           }
         }
       } catch (error) {
         if (error.response) {
-          // El servidor respondió con un status fuera del rango 2xx
           this.errorMessage = error.response.data.error || 'Error en la autenticación';
         } else if (error.request) {
-          // La petición fue hecha pero no se recibió respuesta
           this.errorMessage = 'No se pudo conectar con el servidor';
         } else {
-          // Error en la configuración de la petición
           this.errorMessage = 'Error al procesar la solicitud';
         }
         console.error('Error:', error);

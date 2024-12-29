@@ -1,5 +1,6 @@
 package iwebgym.service;
 
+import iwebgym.dto.SocioData;
 import iwebgym.dto.UserData;
 import iwebgym.model.Monitor;
 import iwebgym.model.Socio;
@@ -91,6 +92,16 @@ public class UserService {
         if (usuario == null) return null;
         else {
             return modelMapper.map(usuario, UserData.class);
+        }
+    }
+
+
+    @Transactional(readOnly = true)
+    public SocioData findSocioByEmail(String email) {
+        Socio usuario = socioRepository.findByEmail(email).orElse(null);
+        if (usuario == null) return null;
+        else {
+            return modelMapper.map(usuario, SocioData.class);
         }
     }
 }

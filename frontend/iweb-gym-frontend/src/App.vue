@@ -3,7 +3,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Gimnasio FIT</a>
+        <a class="navbar-brand" href="/">Gimnasio FIT</a>
         <button
           class="navbar-toggler"
           type="button"
