@@ -1,17 +1,17 @@
 <template>
-  <div id="app">
+  <div>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
-      <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+      <div class="container">
         <a class="navbar-brand" href="#">Gimnasio FIT</a>
         <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -52,65 +52,49 @@ export default {
 };
 </script>
 
+
 <style scoped>
 /* Navbar styles */
-.navbar {
-  z-index: 1000;
-  border-bottom: 2px solid #333;
-}
-
-.container-fluid {
-  max-width: 100%;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.navbar-brand {
+.navbar-dark .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.nav-link {
-  font-size: 1.2rem;
+.navbar-dark .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  transition: color 0.3s;
 }
 
-/* Content wrapper style */
-.content-wrapper {
-  flex: 1;
-  background-color: #f8f9fa; /* Light background color for content */
-  padding-top: 80px; /* Give some space under navbar */
-  padding-bottom: 60px; /* Space above footer */
-  min-height: 100vh;
-  border: 2px solid #007bff; /* Border to distinguish the content */
-  margin: 0 20px;
-}
-
-/* Footer styles */
-footer {
-  width: 100%;
-  position: relative;
-  bottom: 0;
-  left: 0;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-footer {
-  border-top: 2px solid #333;
-}
-
-footer a {
+.navbar-dark .nav-link:hover {
   color: white;
-  text-decoration: none;
 }
 
-footer a:hover {
-  text-decoration: underline;
+.navbar-dark .btn-primary {
+  border-radius: 25px;
+}
+
+/* Hero styles */
+.hero {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  z-index: 1;
+}
+
+.hero .container {
+  z-index: 2;
+  position: relative;
+}
+
+.card {
+  border: none;
+}
+
+.card-body {
+  padding: 2rem;
 }
 </style>
