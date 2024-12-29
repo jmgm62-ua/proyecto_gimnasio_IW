@@ -53,4 +53,16 @@ public class UserController {
             return ResponseEntity.ok(userData);
         }
     }
+
+    // Obtener un socio por email
+    @GetMapping("/monitor/{email}")
+    public ResponseEntity<?> getMonitorByEmail(@PathVariable String email) {
+        SocioData userData = userService.findSocioByEmail(email);
+
+        if (userData == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        } else {
+            return ResponseEntity.ok(userData);
+        }
+    }
 }

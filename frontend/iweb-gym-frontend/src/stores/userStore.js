@@ -1,5 +1,6 @@
 // stores/useUserStore.js
 import { defineStore } from 'pinia';
+import piniaPersist from 'pinia-plugin-persistedstate';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -36,4 +37,5 @@ export const useUserStore = defineStore('user', {
       this.fechaNacimiento = fechaNacimiento;
     },
   },
+  persist: true,
 });

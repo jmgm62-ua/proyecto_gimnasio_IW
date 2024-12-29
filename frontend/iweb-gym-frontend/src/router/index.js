@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/Politica-privacidad.vue'),
     },
     {
+      path: '/socio-profile',
+      name: 'socio-profile',
+      component: () => import('../views/MiPerfil-socio.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       // route level code-splitting

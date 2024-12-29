@@ -72,7 +72,7 @@ export default {
             // Redirigir según el tipo de usuario
             switch (response.data.userType) {
               case 'LOGIN_OK_SOCIO':
-                this.$router.push('/socio-dashboard');
+                this.$router.push('/socio-profile');
                 break;
               case 'LOGIN_OK_MONITOR':
                 this.$router.push('/monitor-dashboard');
