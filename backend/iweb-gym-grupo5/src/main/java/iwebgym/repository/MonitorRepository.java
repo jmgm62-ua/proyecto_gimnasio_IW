@@ -1,7 +1,6 @@
 package iwebgym.repository;
 
 import iwebgym.model.Monitor;
-import iwebgym.model.Socio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

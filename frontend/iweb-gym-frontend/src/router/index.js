@@ -27,6 +27,12 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/formLogin.vue'),
     },
+    {
+      path: '/mis-reservas',
+      name: 'mis-reservas',
+      component: () => import('../views/MisReservas-socio.vue'),
+      meta: { requiresAuth: true }
+    },
   ],
 })
 
