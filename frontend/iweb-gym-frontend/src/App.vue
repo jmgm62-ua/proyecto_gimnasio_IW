@@ -17,14 +17,19 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#instalaciones">Instalaciones</a>
+            
+            <!-- Mostrar solo si el usuario no está logueado -->
+            <li class="nav-item" >
+              <button class="nav-link" v-if="!isLoggedIn" >Hazte Socio</button>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#tarifas">Tarifas</a>
+
+            <!-- Mostrar solo si el usuario no está logueado -->
+            <li class="nav-item" >
+              <button class="nav-link" v-if="!isLoggedIn" @click="goToLogin">Inicia sesión</button>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#hazte-socio">Hazte Socio</a>
+
+            <li class="nav-item" >
+              <button class="nav-link" v-if="isLoggedIn" @click="goToLogOut">Cierra sesion</button>
             </li>
           </ul>
         </div>
@@ -47,11 +52,34 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/userStore";
+import { useRouter } from "vue-router";
+import { computed } from "vue";
+
 export default {
   name: "App",
+  setup(){
+    const router = useRouter();
+    const userStore = useUserStore();
+
+    const isLoggedIn = computed(() => userStore.isLoggedIn);
+
+    const goToLogin = () => {
+      router.push("/login");
+    };
+
+    const goToLogOut = () => {
+      userStore.logOut();
+    };
+
+    return {
+      isLoggedIn,
+      goToLogin,
+      goToLogOut,
+    };
+  },
 };
 </script>
-
 
 <style scoped>
 /* Navbar styles */
