@@ -10,6 +10,7 @@ export const useUserStore = defineStore('user', {
     email: null, // Email del usuario
     nombre: null, // Nombre del usuario
     fechaNacimiento: null, // Fecha de nacimiento del usuario
+    tipo_suscripcion: null, // Tipo de suscripcion del usuario
   }),
   actions: {
     // Establecer el tipo de usuario

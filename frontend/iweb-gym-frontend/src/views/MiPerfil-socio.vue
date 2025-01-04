@@ -43,6 +43,18 @@
                   Mis Reservas
                 </router-link>
               </div>
+
+              <div class="text-center mt-4">
+                <router-link to="/mis-reservas" class="btn btn-primary">
+                  Cargar Saldo
+                </router-link>
+              </div>
+
+              <div class="text-center mt-4">
+                <router-link to="/mis-reservas" class="btn btn-primary">
+                  Modificar tipo de suscripción
+                </router-link>
+              </div>
             </div>
           </div>
         </div>
@@ -76,6 +88,9 @@ export default {
       try {
         const response = await axios.get(`http://localhost:8080/users/find_socio/${this.email}`);
         this.userData = response.data;
+        const userStore = useUserStore();
+        userStore.tipo_suscripcion = this.userData.tipoCuota
+        
       } catch (error) {
         console.error('Error al obtener los datos del socio:', error);
         this.userData = null;
@@ -112,6 +127,7 @@ export default {
 .btn-primary{
   color: white;
   background-color: #1d1d1d;
+  border: 2px solid #000000;
 }
 
 strong {
