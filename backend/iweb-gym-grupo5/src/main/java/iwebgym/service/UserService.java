@@ -1,6 +1,7 @@
 package iwebgym.service;
 
 import iwebgym.authentication.ManagerUserSession;
+import iwebgym.dto.MonitorData;
 import iwebgym.dto.SocioData;
 import iwebgym.dto.UserData;
 import iwebgym.model.Monitor;
@@ -110,6 +111,15 @@ public class UserService {
         if (usuario == null) return null;
         else {
             return modelMapper.map(usuario, SocioData.class);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public MonitorData findMonitorByEmail(String email) {
+        Monitor usuario = monitorRepository.findByEmail(email).orElse(null);
+        if (usuario == null) return null;
+        else {
+            return modelMapper.map(usuario, MonitorData.class);
         }
     }
 }

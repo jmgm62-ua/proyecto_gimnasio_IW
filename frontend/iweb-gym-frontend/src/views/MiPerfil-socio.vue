@@ -34,6 +34,11 @@
                 <div class="col-md-4"><strong>Fecha de Baja:</strong></div>
                 <div class="col-md-8">{{ userData.fechaBaja }}</div>
               </div>
+              
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Direccion:</strong></div>
+                <div class="col-md-8">{{ userData.direccion }}</div>
+              </div>
               <div class="row mb-3">
                 <div class="col-md-4"><strong>Saldo:</strong></div>
                 <div class="col-md-8">{{ userData.saldo | currency }}</div>
@@ -90,6 +95,7 @@ export default {
         this.userData = response.data;
         const userStore = useUserStore();
         userStore.tipo_suscripcion = this.userData.tipoCuota
+        userStore.direccion = this.userData.direccion
         
       } catch (error) {
         console.error('Error al obtener los datos del socio:', error);

@@ -1,5 +1,6 @@
 package iwebgym.controller;
 
+import iwebgym.dto.MonitorData;
 import iwebgym.dto.SocioData;
 import iwebgym.dto.UserData;
 import iwebgym.model.User;
@@ -55,9 +56,9 @@ public class UserController {
     }
 
     // Obtener un socio por email
-    @GetMapping("/monitor/{email}")
+    @GetMapping("/find_monitor/{email}")
     public ResponseEntity<?> getMonitorByEmail(@PathVariable String email) {
-        SocioData userData = userService.findSocioByEmail(email);
+        MonitorData userData = userService.findMonitorByEmail(email);
 
         if (userData == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");

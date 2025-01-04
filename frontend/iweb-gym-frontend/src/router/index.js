@@ -33,6 +33,13 @@ const router = createRouter({
       component: () => import('../views/MisReservas-socio.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/monitor-profile',
+      name: 'monitor_profile',
+      component: () => import('../views/MiPerfil-monitor.vue'),
+      meta: { requiresAuth: true }
+    },
+    
   ],
 })
 
