@@ -33,6 +33,12 @@ const router = createRouter({
       component: () => import('../views/MisReservas-socio.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/mis-clases',
+      name: 'mis-clases',
+      component: () => import('../views/MisClases-monitor.vue'),
+      meta: { requiresAuth: true }
+    }
   ],
 })
 
