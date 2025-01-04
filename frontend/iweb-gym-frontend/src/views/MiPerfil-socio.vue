@@ -1,129 +1,137 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Mis Reservas</h1>
-    
-    <div class="mb-4">
-      <button 
-        @click="viewMode = 'list'"
-        :class="['mr-2 px-4 py-2 rounded', viewMode === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200']"
-      >
-        Lista
-      </button>
-      <button 
-        @click="viewMode = 'calendar'"
-        :class="['px-4 py-2 rounded', viewMode === 'calendar' ? 'bg-blue-500 text-white' : 'bg-gray-200']"
-      >
-        Calendario
-      </button>
-    </div>
-
-    <!-- List View -->
-    <div v-if="viewMode === 'list'">
-      <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-4">Reservas Pendientes</h2>
-        <div v-if="reservasPendientes.length" class="space-y-4">
-          <div v-for="reserva in reservasPendientes" :key="reserva.id" 
-               class="border p-4 rounded shadow">
-            <h3 class="font-medium">{{ reserva.titulo }}</h3>
-            <p>Fecha: {{ formatDate(reserva.fecha) }}</p>
-            <p>Estado: <span class="text-yellow-600">Pendiente</span></p>
+  <div class="container my-4">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <div class="card-header">
+            <h3>Perfil del Socio</h3>
+          </div>
+          <div class="card-body">
+            <div v-if="loading" class="text-center">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Cargando...</span>
+              </div>
+            </div>
+            <div v-else>
+              <h5>Información del Store</h5>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Nombre (Store):</strong></div>
+                <div class="col-md-8">{{ userStore.nombre }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Email (Store):</strong></div>
+                <div class="col-md-8">{{ userStore.email }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Fecha de Nacimiento (Store):</strong></div>
+                <div class="col-md-8">{{ userStore.fechaNacimiento }}</div>
+              </div>
+              
+              <h5>Información del Socio</h5>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Nombre:</strong></div>
+                <div class="col-md-8">{{ userData.nombre }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Email:</strong></div>
+                <div class="col-md-8">{{ userData.email }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Tipo de Cuota:</strong></div>
+                <div class="col-md-8">{{ userData.tipoCuota }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Fecha de Alta:</strong></div>
+                <div class="col-md-8">{{ userData.fechaAlta }}</div>
+              </div>
+              <div class="row mb-3" v-if="userData.fechaBaja">
+                <div class="col-md-4"><strong>Fecha de Baja:</strong></div>
+                <div class="col-md-8">{{ userData.fechaBaja }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Saldo:</strong></div>
+                <div class="col-md-8">{{ userData.saldo | currency }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Inscripción:</strong></div>
+                <div class="col-md-8">{{ userData.inscripcion }}</div>
+              </div>
+              <div class="text-center mt-4">
+                <router-link to="/mis-reservas" class="btn btn-primary">
+                  Mis Reservas
+                </router-link>
+              </div>
+            </div>
           </div>
         </div>
-        <p v-else class="text-gray-500">No hay reservas pendientes</p>
       </div>
-
-      <div>
-        <h2 class="text-xl font-semibold mb-4">Historial de Reservas</h2>
-        <div v-if="reservasHistoricas.length" class="space-y-4">
-          <div v-for="reserva in reservasHistoricas" :key="reserva.id" 
-               class="border p-4 rounded shadow bg-gray-50">
-            <h3 class="font-medium">{{ reserva.nombreActividad }}</h3>
-            <p>Fecha: {{ formatDate(reserva.fecha) }}</p>
-            <p>Estado: <span class="text-green-600">Completada</span></p>
-          </div>
-        </div>
-        <p v-else class="text-gray-500">No hay reservas históricas</p>
-      </div>
-    </div>
-
-    <!-- Calendar View -->
-    <div v-else class="border rounded p-4">
-      <FullCalendar 
-        :options="calendarOptions"
-        class="h-screen"
-      />
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, computed } from 'vue';
+<script>
 import { useUserStore } from '@/stores/userStore';
 import axios from 'axios';
-import FullCalendar from '@fullcalendar/vue3';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import esLocale from '@fullcalendar/core/locales/es';
 
-const userStore = useUserStore();
-const email = userStore.email;
-const viewMode = ref('list');
-const reservasPendientes = ref([]);
-const reservasHistoricas = ref([]);
-
-const calendarEvents = computed(() => {
-  const pendientes = reservasPendientes.value.map(reserva => ({
-    title: reserva.nombreActividad,
-    start: reserva.fecha,
-    backgroundColor: '#EAB308', // yellow-600
-    borderColor: '#EAB308'
-  }));
-
-  const historicas = reservasHistoricas.value.map(reserva => ({
-    title: reserva.nombreActividad,
-    start: reserva.fecha,
-    backgroundColor: '#16A34A', // green-600
-    borderColor: '#16A34A'
-  }));
-
-  return [...pendientes, ...historicas];
-});
-
-const calendarOptions = computed(() => ({
-  plugins: [dayGridPlugin],
-  initialView: 'dayGridMonth',
-  locale: esLocale,
-  events: calendarEvents.value,
-  headerToolbar: {
-    left: 'prev,next today',
-    center: 'title',
-    right: 'dayGridMonth,dayGridWeek'
+export default {
+  data() {
+    return {
+      userData: {},
+      loading: true,
+    };
   },
-  firstDay: 1,
-  height: 'auto',
-  eventClick: (info) => {
-    alert(`Reserva: ${info.event.title}`);
-  }
-}));
-
-const fetchReservas = async () => {
-  try {
-    const [pendientesRes, historicasRes] = await Promise.all([
-      axios.get(`http://localhost:8080/reservas/pendientes/${email}`),
-      axios.get(`http://localhost:8080/reservas/historicas/${email}`)
-    ]);
-    
-    reservasPendientes.value = pendientesRes.data;
-    reservasHistoricas.value = historicasRes.data;
-  } catch (error) {
-    console.error('Error al obtener las reservas:', error);
-  }
+  computed: {
+    email() {
+      const userStore = useUserStore();
+      return userStore.email; // Use the email from the Pinia store
+    },
+    userStore() {
+      return useUserStore(); // Access the entire Pinia store
+    },
+  },
+  methods: {
+    async fetchUserData() {
+      try {
+        const response = await axios.get(`http://localhost:8080/users/find_socio/${this.email}`);
+        this.userData = response.data;
+      } catch (error) {
+        console.error('Error al obtener los datos del socio:', error);
+        this.userData = null;
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchUserData();
+  },
 };
-
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('es-ES');
-};
-
-onMounted(() => {
-  fetchReservas();
-});
 </script>
+
+<style scoped>
+.card {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.row {
+  margin-bottom: 1rem;
+}
+
+strong {
+  font-weight: 600;
+}
+
+.currency {
+  font-weight: bold;
+}
+</style>
