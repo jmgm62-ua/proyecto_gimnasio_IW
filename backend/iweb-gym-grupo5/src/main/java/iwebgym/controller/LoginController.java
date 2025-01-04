@@ -55,6 +55,9 @@ public class LoginController {
 
         response.put("status", "success");
         response.put("userType", loginStatus.toString());
+
+
+
         return ResponseEntity.ok(response);
     }
 }

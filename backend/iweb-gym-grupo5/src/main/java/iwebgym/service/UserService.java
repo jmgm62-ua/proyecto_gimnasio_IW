@@ -1,5 +1,6 @@
 package iwebgym.service;
 
+import iwebgym.authentication.ManagerUserSession;
 import iwebgym.dto.SocioData;
 import iwebgym.dto.UserData;
 import iwebgym.model.Monitor;
@@ -41,6 +42,9 @@ public class UserService {
     private MonitorRepository monitorRepository;
 
     @Autowired
+    private ManagerUserSession managerUserSession;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     public List<User> getAllUsers() {
@@ -53,6 +57,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public LoginStatus login(String eMail, String password) {
+
         System.out.println("Email recibido en loginSubmit: " + eMail);
         System.out.println("contraseña recibido en loginSubmit: " + password);
         if (eMail == null || eMail.trim().isEmpty()) {
@@ -63,6 +68,7 @@ public class UserService {
             if (!socio.get().getPassword().equals(password)) {
                 return LoginStatus.ERROR_PASSWORD;
             } else {
+                managerUserSession.logearUsuario(eMail);
                 return LoginStatus.LOGIN_OK_SOCIO;
             }
         }
@@ -71,6 +77,7 @@ public class UserService {
             if (!webMaster.get().getPassword().equals(password)) {
                 return LoginStatus.ERROR_PASSWORD;
             } else {
+                managerUserSession.logearUsuario(eMail);
                 return LoginStatus.LOGIN_OK_WEBMASTER;
             }
         }
@@ -79,6 +86,7 @@ public class UserService {
             if (!monitor.get().getPassword().equals(password)) {
                 return LoginStatus.ERROR_PASSWORD;
             } else {
+                managerUserSession.logearUsuario(eMail);
                 return LoginStatus.LOGIN_OK_MONITOR;
             }
         }
