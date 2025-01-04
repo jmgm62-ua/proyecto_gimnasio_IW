@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container">
@@ -17,17 +17,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            
-            <!-- Mostrar solo si el usuario no está logueado -->
             <li class="nav-item" >
               <button class="nav-link" v-if="!isLoggedIn" >Hazte Socio</button>
             </li>
-
-            <!-- Mostrar solo si el usuario no está logueado -->
             <li class="nav-item" >
               <button class="nav-link" v-if="!isLoggedIn" @click="goToLogin">Inicia sesión</button>
             </li>
-
+            <li class="nav-item" >
+              <button class="nav-link" v-if="!isLoggedIn" @click="goToLogin">Inicia sesión</button>
+            </li>
+            <li class="nav-item" >
+              <button class="nav-link" v-if="isLoggedIn" @click="goToMiPerfil">Mi perfil</button>
+            </li>
             <li class="nav-item" >
               <button class="nav-link" v-if="isLoggedIn" @click="goToLogOut">Cierra sesion</button>
             </li>
@@ -35,14 +36,12 @@
         </div>
       </div>
     </nav>
-
     <!-- Main Content -->
-    <div class="content-wrapper">
+    <main class="content-wrapper">
       <RouterView />
-    </div>
-
+    </main>
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-auto">
+    <footer class="bg-dark text-white py-4">
       <div class="container text-center">
         <p>&copy; 2024 Gimnasio FIT. Todos los derechos reservados.</p>
         <a href="/politica-privacidad" class="text-white">Política de Privacidad</a>
@@ -58,10 +57,9 @@ import { computed } from "vue";
 
 export default {
   name: "App",
-  setup(){
+  setup() {
     const router = useRouter();
     const userStore = useUserStore();
-
     const isLoggedIn = computed(() => userStore.isLoggedIn);
 
     const goToLogin = () => {
@@ -70,18 +68,39 @@ export default {
 
     const goToLogOut = () => {
       userStore.logOut();
+      router.push("/")
+    };
+
+    const goToMiPerfil = () => {
+      switch (userStore.userType) {
+        case 'LOGIN_OK_SOCIO':
+          router.push('/socio-profile')
+          break;
+      }
     };
 
     return {
       isLoggedIn,
       goToLogin,
       goToLogOut,
+      goToMiPerfil,
     };
   },
 };
 </script>
 
 <style scoped>
+/* Layout styles */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  flex: 1 0 auto;
+}
+
 /* Navbar styles */
 .navbar-dark .navbar-brand {
   font-size: 1.5rem;
