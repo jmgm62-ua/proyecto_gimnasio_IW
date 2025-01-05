@@ -23,9 +23,7 @@
             <li class="nav-item" >
               <button class="nav-link" v-if="!isLoggedIn" @click="goToLogin">Inicia sesión</button>
             </li>
-            <li class="nav-item" >
-              <button class="nav-link" v-if="!isLoggedIn" @click="goToLogin">Inicia sesión</button>
-            </li>
+
             <li class="nav-item" >
               <button class="nav-link" v-if="isLoggedIn" @click="goToMiPerfil">Mi perfil</button>
             </li>

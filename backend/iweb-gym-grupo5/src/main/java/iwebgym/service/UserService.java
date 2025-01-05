@@ -4,6 +4,7 @@ import iwebgym.authentication.ManagerUserSession;
 import iwebgym.dto.MonitorData;
 import iwebgym.dto.SocioData;
 import iwebgym.dto.UserData;
+import iwebgym.dto.WebMasterData;
 import iwebgym.model.Monitor;
 import iwebgym.model.Socio;
 import iwebgym.model.User;
@@ -120,6 +121,15 @@ public class UserService {
         if (usuario == null) return null;
         else {
             return modelMapper.map(usuario, MonitorData.class);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public WebMasterData findWebMasterByEmail(String email) {
+        WebMaster usuario = webMasterRepository.findByEmail(email).orElse(null);
+        if (usuario == null) return null;
+        else {
+            return modelMapper.map(usuario, WebMasterData.class);
         }
     }
 }

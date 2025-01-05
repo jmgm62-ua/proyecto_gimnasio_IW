@@ -3,6 +3,7 @@ package iwebgym.controller;
 import iwebgym.dto.MonitorData;
 import iwebgym.dto.SocioData;
 import iwebgym.dto.UserData;
+import iwebgym.dto.WebMasterData;
 import iwebgym.model.User;
 import iwebgym.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +56,22 @@ public class UserController {
         }
     }
 
-    // Obtener un socio por email
+    // Obtener un monitor por email
     @GetMapping("/find_monitor/{email}")
     public ResponseEntity<?> getMonitorByEmail(@PathVariable String email) {
         MonitorData userData = userService.findMonitorByEmail(email);
+
+        if (userData == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        } else {
+            return ResponseEntity.ok(userData);
+        }
+    }
+
+    // Obtener un socio por email
+    @GetMapping("/find_webmaster/{email}")
+    public ResponseEntity<?> getWebMasterByEmail(@PathVariable String email) {
+        WebMasterData userData = userService.findWebMasterByEmail(email);
 
         if (userData == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");

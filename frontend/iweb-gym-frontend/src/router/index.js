@@ -39,6 +39,13 @@ const router = createRouter({
       component: () => import('../views/MiPerfil-monitor.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/webmaster-profile',
+      name: 'webmaster-profile',
+      component: () => import('../views/MiPerfil-webmaster.vue'),
+      meta: { requiresAuth: true }
+    },
+    
     
   ],
 })
