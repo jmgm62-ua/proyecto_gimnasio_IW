@@ -13,10 +13,24 @@
               </div>
             </div>
             <div v-else>
+              <h5>Información del Store</h5>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Nombre (Store):</strong></div>
+                <div class="col-md-8">{{ userStore.nombre }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Email (Store):</strong></div>
+                <div class="col-md-8">{{ userStore.email }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Fecha de Nacimiento (Store):</strong></div>
+                <div class="col-md-8">{{ userStore.fechaNacimiento }}</div>
+              </div>
+              
               <h5>Información del Socio</h5>
               <div class="row mb-3">
                 <div class="col-md-4"><strong>Nombre:</strong></div>
-                <div class="col-md-8">{{ userData.name }}</div>
+                <div class="col-md-8">{{ userData.nombre }}</div>
               </div>
               <div class="row mb-3">
                 <div class="col-md-4"><strong>Email:</strong></div>
@@ -34,30 +48,17 @@
                 <div class="col-md-4"><strong>Fecha de Baja:</strong></div>
                 <div class="col-md-8">{{ userData.fechaBaja }}</div>
               </div>
-              
-              <div class="row mb-3">
-                <div class="col-md-4"><strong>Direccion:</strong></div>
-                <div class="col-md-8">{{ userData.direccion }}</div>
-              </div>
               <div class="row mb-3">
                 <div class="col-md-4"><strong>Saldo:</strong></div>
                 <div class="col-md-8">{{ userData.saldo | currency }}</div>
               </div>
+              <div class="row mb-3">
+                <div class="col-md-4"><strong>Inscripción:</strong></div>
+                <div class="col-md-8">{{ userData.inscripcion }}</div>
+              </div>
               <div class="text-center mt-4">
                 <router-link to="/mis-reservas" class="btn btn-primary">
                   Mis Reservas
-                </router-link>
-              </div>
-
-              <div class="text-center mt-4">
-                <router-link to="/mis-reservas" class="btn btn-primary">
-                  Cargar Saldo
-                </router-link>
-              </div>
-
-              <div class="text-center mt-4">
-                <router-link to="/mis-reservas" class="btn btn-primary">
-                  Modificar tipo de suscripción
                 </router-link>
               </div>
             </div>
@@ -93,10 +94,6 @@ export default {
       try {
         const response = await axios.get(`http://localhost:8080/users/find_socio/${this.email}`);
         this.userData = response.data;
-        const userStore = useUserStore();
-        userStore.tipo_suscripcion = this.userData.tipoCuota
-        userStore.direccion = this.userData.direccion
-        
       } catch (error) {
         console.error('Error al obtener los datos del socio:', error);
         this.userData = null;
@@ -117,7 +114,7 @@ export default {
 }
 
 .card-header {
-  background-color: #1d1d1d;
+  background-color: #007bff;
   color: white;
   text-align: center;
 }
@@ -128,12 +125,6 @@ export default {
 
 .row {
   margin-bottom: 1rem;
-}
-
-.btn-primary{
-  color: white;
-  background-color: #1d1d1d;
-  border: 2px solid #000000;
 }
 
 strong {

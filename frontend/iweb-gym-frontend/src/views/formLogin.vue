@@ -75,10 +75,10 @@ export default {
                 this.$router.push('/socio-profile');
                 break;
               case 'LOGIN_OK_MONITOR':
-                this.$router.push('/monitor-profile');
+                this.$router.push('/monitor-dashboard');
                 break;
               case 'LOGIN_OK_WEBMASTER':
-                this.$router.push('/webmaster-profile');
+                this.$router.push('/admin-dashboard');
                 break;
             }
           }

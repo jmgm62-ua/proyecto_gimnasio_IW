@@ -15,16 +15,12 @@ public class SocioData {
     private String fechaBaja;
     private float saldo;
     private String inscripcion;
-    private String direccion;
-    private String fechaNacimiento;
-    private String telefono;
-    private Boolean activo;
 
 
     public SocioData() {
     }
 
-    public SocioData(Long id, String name, String email, String tipoCuota, String fechaAlta, String fechaBaja, float saldo, String inscripcion, String direccion, String fechaNacimiento, String telefono, Boolean activo) {
+    public SocioData(Long id, String name, String email, String tipoCuota, String fechaAlta, String fechaBaja, float saldo, String inscripcion) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -33,10 +29,6 @@ public class SocioData {
         this.fechaBaja = fechaBaja;
         this.saldo = saldo;
         this.inscripcion = inscripcion;
-        this.direccion = direccion;
-        this.fechaNacimiento =  fechaNacimiento;
-        this.telefono = telefono;
-        this.activo = activo;
 
     }
 

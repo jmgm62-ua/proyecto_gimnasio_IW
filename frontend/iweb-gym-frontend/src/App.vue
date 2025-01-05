@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div class="container">
@@ -17,29 +17,27 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item" >
-              <button class="nav-link" v-if="!isLoggedIn" >Hazte Socio</button>
+            <li class="nav-item">
+              <a class="nav-link" href="#instalaciones">Instalaciones</a>
             </li>
-            <li class="nav-item" >
-              <button class="nav-link" v-if="!isLoggedIn" @click="goToLogin">Inicia sesión</button>
+            <li class="nav-item">
+              <a class="nav-link" href="#tarifas">Tarifas</a>
             </li>
-
-            <li class="nav-item" >
-              <button class="nav-link" v-if="isLoggedIn" @click="goToMiPerfil">Mi perfil</button>
-            </li>
-            <li class="nav-item" >
-              <button class="nav-link" v-if="isLoggedIn" @click="goToLogOut">Cierra sesion</button>
+            <li class="nav-item">
+              <a class="nav-link" href="#hazte-socio">Hazte Socio</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
+
     <!-- Main Content -->
-    <main class="content-wrapper">
+    <div class="content-wrapper">
       <RouterView />
-    </main>
+    </div>
+
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
+    <footer class="bg-dark text-white py-4 mt-auto">
       <div class="container text-center">
         <p>&copy; 2024 Gimnasio FIT. Todos los derechos reservados.</p>
         <a href="/politica-privacidad" class="text-white">Política de Privacidad</a>
@@ -49,56 +47,13 @@
 </template>
 
 <script>
-import { useUserStore } from "@/stores/userStore";
-import { useRouter } from "vue-router";
-import { computed } from "vue";
-
 export default {
   name: "App",
-  setup() {
-    const router = useRouter();
-    const userStore = useUserStore();
-    const isLoggedIn = computed(() => userStore.isLoggedIn);
-
-    const goToLogin = () => {
-      router.push("/login");
-    };
-
-    const goToLogOut = () => {
-      userStore.logOut();
-      router.push("/")
-    };
-
-    const goToMiPerfil = () => {
-      switch (userStore.userType) {
-        case 'LOGIN_OK_SOCIO':
-          router.push('/socio-profile')
-          break;
-      }
-    };
-
-    return {
-      isLoggedIn,
-      goToLogin,
-      goToLogOut,
-      goToMiPerfil,
-    };
-  },
 };
 </script>
 
+
 <style scoped>
-/* Layout styles */
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content-wrapper {
-  flex: 1 0 auto;
-}
-
 /* Navbar styles */
 .navbar-dark .navbar-brand {
   font-size: 1.5rem;
