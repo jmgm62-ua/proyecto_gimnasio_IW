@@ -18,6 +18,7 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
+
     @Autowired
     private UserService userService;
 
@@ -78,5 +79,19 @@ public class UserController {
         } else {
             return ResponseEntity.ok(userData);
         }
+    }
+
+    // Lista de usuario pendientes de activación por el webmaster
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<UserData>> getInactiveUsers() {
+        List<UserData> inactivos = userService.findInactiveUsers();
+        return ResponseEntity.ok(inactivos);
+    }
+
+    // Activaar cuenta aprobada por el webmaster
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<Void> activateUser(@PathVariable Long id) {
+        userService.activateUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

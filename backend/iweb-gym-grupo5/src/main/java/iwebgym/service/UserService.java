@@ -132,4 +132,21 @@ public class UserService {
             return modelMapper.map(usuario, WebMasterData.class);
         }
     }
+
+    // Lista de usuarios inactivos
+    public List<UserData> findInactiveUsers() {
+        List<Usuario> usuarios = usuarioRepository.findInactiveUsers();
+        return usuarios.stream()
+                .map(usuario -> new UserData(usuario))
+                .collect(Collectors.toList());
+    }
+
+    // Cambia el estado del usuario a activo
+    public void activateUser(Long id) {
+        User usuario =userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        usuario.setActivo(true);
+        userRepository.save(usuario);
+    }
+
 }
