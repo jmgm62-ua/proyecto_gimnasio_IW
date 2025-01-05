@@ -5,16 +5,19 @@ import iwebgym.dto.LoginData;
 import iwebgym.dto.UserData;
 import iwebgym.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
-@Controller
+import java.util.HashMap;
+import java.util.Map;
 
+@RestController  // Cambiar @Controller por @RestController
+@CrossOrigin(origins = "http://localhost:5173") // Asumiendo que Vue corre en el puerto 5173
 public class LoginController {
 
     @Autowired
@@ -31,28 +34,32 @@ public class LoginController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginData", new LoginData());
-        return "formLogin";
+        return "hola";
     }
 
-    @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute LoginData loginData, Model model, HttpSession session) {
-        UserService.LoginStatus loginStatus = usuarioService.login(loginData.geteMail(), loginData.getPassword());
+    @PostMapping("/api/login")
+    public ResponseEntity<?> loginSubmit(@RequestBody LoginData loginData) {
+        Map<String, Object> response = new HashMap<>();
 
-        if (loginStatus == UserService.LoginStatus.LOGIN_OK) {
-            UserData usuario = usuarioService.findByEmail(loginData.geteMail());
-            managerUserSession.logearUsuario(usuario.getId());
+        UserService.LoginStatus loginStatus = usuarioService.login(loginData.getEmail(), loginData.getPassword());
 
-            if ("XMLHttpRequest".equals(session.getAttribute("X-Requested-With"))) {
-                return "{\"redirect\":\"/usuarios/" + usuario.getId() + "/tareas\"}";
-            }
-
-            return "redirect:/usuarios/" + usuario.getId() + "/tareas";
-        } else if (loginStatus == UserService.LoginStatus.USER_NOT_FOUND) {
-            return "{\"error\":\"No existe usuario\"}";
-        } else if (loginStatus == UserService.LoginStatus.ERROR_PASSWORD) {
-            return "{\"error\":\"Contraseña incorrecta\"}";
+        if (loginStatus == UserService.LoginStatus.USER_NOT_FOUND) {
+            response.put("error", "Usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-        return "{\"error\":\"Error desconocido\"}";
-    }
 
+        if (loginStatus == UserService.LoginStatus.ERROR_PASSWORD) {
+            response.put("error", "Contraseña incorrecta");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        response.put("status", "success");
+        response.put("userType", loginStatus.toString());
+
+
+
+        return ResponseEntity.ok(response);
+    }
 }
+
+

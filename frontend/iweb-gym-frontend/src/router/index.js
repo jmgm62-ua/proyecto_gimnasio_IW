@@ -10,12 +10,14 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/politica-privacidad',
+      name: 'politica-privacidad',
+      component: () => import('../views/Politica-privacidad.vue'),
+    },
+    {
+      path: '/socio-profile',
+      name: 'socio-profile',
+      component: () => import('../views/MiPerfil-socio.vue'),
     },
     {
       path: '/login',
@@ -25,6 +27,26 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/formLogin.vue'),
     },
+    {
+      path: '/mis-reservas',
+      name: 'mis-reservas',
+      component: () => import('../views/MisReservas-socio.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/monitor-profile',
+      name: 'monitor_profile',
+      component: () => import('../views/MiPerfil-monitor.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/webmaster-profile',
+      name: 'webmaster-profile',
+      component: () => import('../views/MiPerfil-webmaster.vue'),
+      meta: { requiresAuth: true }
+    },
+    
+    
   ],
 })
 

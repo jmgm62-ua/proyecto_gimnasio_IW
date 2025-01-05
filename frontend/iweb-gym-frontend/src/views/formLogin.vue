@@ -5,63 +5,95 @@
       <div class="form-group">
         <label for="email">Correo Electrónico</label>
         <input
-            type="email"
-            id="email"
-            v-model="loginData.eMail"
-            required
+          type="email"
+          id="email"
+          v-model="loginData.email"
+          required
         />
       </div>
       <div class="form-group">
         <label for="password">Contraseña</label>
         <input
-            type="password"
-            id="password"
-            v-model="loginData.password"
-            required
+          type="password"
+          id="password"
+          v-model="loginData.password"
+          required
         />
       </div>
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
-      <button type="submit" class="btn">Iniciar Sesión</button>
+      <button type="submit" class="btn" :disabled="isLoading">
+        {{ isLoading ? 'Cargando...' : 'Iniciar Sesión' }}
+      </button>
     </form>
   </div>
 </template>
 
 <script>
+import { useUserStore } from '@/stores/userStore'; // Importa el almacén de usuario
+import axios from 'axios';
+
 export default {
   data() {
     return {
       loginData: {
-        eMail: '',
+        email: '',
         password: '',
       },
       errorMessage: '',
+      isLoading: false,
     };
   },
   methods: {
     async submitLogin() {
-      try {
-        const response = await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.loginData),
-        });
+      this.isLoading = true;
+      this.errorMessage = '';
 
-        if (response.redirected) {
-          // Redirigir a la URL proporcionada por el backend
-          window.location.href = response.url;
-        } else {
-          const result = await response.json();
-          if (result.error) {
-            this.errorMessage = result.error;
+      try {
+        // Enviar la solicitud de inicio de sesión
+        const response = await axios.post('http://localhost:8080/api/login', this.loginData);
+
+        if (response.data.status === 'success') {
+          const userStore = useUserStore(); // Accede al almacén de usuario
+
+          // Establecer el tipo de usuario
+          userStore.setUserType(response.data.userType);
+          userStore.setIsLoggedIn();
+
+          // Obtener los datos del usuario desde el backend
+          const userResponse = await axios.get(`http://localhost:8080/users/${this.loginData.email}`);
+
+          if (userResponse.status === 200) {
+            // Almacenar los datos del usuario en el store
+            userStore.setUserData(userResponse.data);
+            console.log('Datos del usuario almacenados:', userStore.$state);
+
+            // Redirigir según el tipo de usuario
+            switch (response.data.userType) {
+              case 'LOGIN_OK_SOCIO':
+                this.$router.push('/socio-profile');
+                break;
+              case 'LOGIN_OK_MONITOR':
+                this.$router.push('/monitor-profile');
+                break;
+              case 'LOGIN_OK_WEBMASTER':
+                this.$router.push('/webmaster-profile');
+                break;
+            }
           }
         }
       } catch (error) {
-        this.errorMessage = 'Error de conexión con el servidor.';
-        console.error(error);
+        if (error.response) {
+          this.errorMessage = error.response.data.error || 'Error en la autenticación';
+        } else if (error.request) {
+          this.errorMessage = 'No se pudo conectar con el servidor';
+        } else {
+          this.errorMessage = 'Error al procesar la solicitud';
+        }
+        console.error('Error:', error);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -106,9 +138,15 @@ export default {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
 }
 
 .btn:hover {
   background-color: #0056b3;
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

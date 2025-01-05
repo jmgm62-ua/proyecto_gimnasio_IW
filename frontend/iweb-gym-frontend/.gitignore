@@ -8,11 +8,13 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.vite
 .DS_Store
 dist
 dist-ssr
 coverage
 *.local
+.vscode
 
 /cypress/videos/
 /cypress/screenshots/

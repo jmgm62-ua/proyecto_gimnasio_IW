@@ -3,28 +3,26 @@ package iwebgym.authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
-
-//REVISAR ESTO
 @Component
 public class ManagerUserSession {
-
+    @Autowired
     HttpSession session;
 
     // Añadimos el id de usuario en la sesión HTTP para hacer
     // una autorización sencilla. En los métodos de controllers
     // comprobamos si el id del usuario logeado coincide con el obtenido
     // desde la URL
-    public void logearUsuario(Long idUsuario) {
-        session.setAttribute("idUsuarioLogeado", idUsuario);
+    public void logearUsuario(String email) {
+        session.setAttribute("emailUsuarioLogeado", email);
     }
 
     public Long usuarioLogeado() {
-        return (Long) session.getAttribute("idUsuarioLogeado");
+        return (Long) session.getAttribute("emailUsuarioLogeado");
     }
 
     public void logout() {
-        session.setAttribute("idUsuarioLogeado", null);
+        session.setAttribute("emailUsuarioLogeado", null);
     }
 }

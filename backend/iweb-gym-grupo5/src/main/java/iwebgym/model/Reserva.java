@@ -1,11 +1,13 @@
 package iwebgym.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "reservas")
+@Getter
 public class Reserva {
 
     @Id
