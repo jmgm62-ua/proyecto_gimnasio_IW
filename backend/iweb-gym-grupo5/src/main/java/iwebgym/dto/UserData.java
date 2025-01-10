@@ -8,7 +8,6 @@ public class UserData {
     private Long id;
     private String email;
     private String nombre;
-    private String password;
     private Date fechaNacimiento;
     private boolean admin;
     private boolean block;
@@ -43,9 +42,6 @@ public class UserData {
         this.nombre = nombre;
     }
 
-    public void setPassword(String password) { this.password = password; }
-
-    public String getPassword() { return password; }
 
     public Date getFechaNacimiento() {
         return fechaNacimiento;
