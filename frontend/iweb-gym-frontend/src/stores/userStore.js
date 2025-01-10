@@ -12,11 +12,16 @@ export const useUserStore = defineStore('user', {
     fechaNacimiento: null, // Fecha de nacimiento del usuario
     tipo_suscripcion: null, // Tipo de suscripcion del usuario
     direccion: null,
+    actividad_a_reservar: null,
   }),
   actions: {
     // Establecer el tipo de usuario
     setUserType(type) {
       this.userType = type;
+    },
+    // Establecer la actividad a reservar
+    setActividadAReservar(actividad) {
+      this.actividad_a_reservar = actividad;
     },
     // Marcar la sesión como activa
     setIsLoggedIn() {
