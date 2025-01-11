@@ -91,7 +91,7 @@
       <div class="container text-center">
         <h2 class="mb-4">Hazte Socio</h2>
         <p>Únete a nuestra comunidad y mejora tu calidad de vida.</p>
-        <a href="/formulario-alta" class="btn btn-light btn-lg">Formulario de Inscripción</a>
+        <a href="/solicitud-socio" class="btn btn-light btn-lg">Formulario de Inscripción</a>
       </div>
     </section>
   </div>

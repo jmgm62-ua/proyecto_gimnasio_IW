@@ -56,6 +56,11 @@ const router = createRouter({
       name: 'ModificarCuota',
       component: () => import('@/views/ModificarCuota.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/solicitud-socio',
+      name: 'SolicitudSocio',
+      component: () => import('@/views/SolicitudSocio.vue')
     }
     
     
