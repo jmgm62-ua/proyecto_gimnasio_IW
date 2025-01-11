@@ -27,7 +27,7 @@ public class UserService {
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public enum LoginStatus {LOGIN_OK_SOCIO,LOGIN_OK_MONITOR,LOGIN_OK_WEBMASTER, USER_NOT_FOUND, ERROR_PASSWORD}
+    public enum LoginStatus {LOGIN_OK_SOCIO,LOGIN_OK_MONITOR,LOGIN_OK_WEBMASTER, USER_NOT_FOUND, ERROR_PASSWORD, SOCIO_NO_ACTIVO}
 
     @Autowired
     private UserRepository userRepository;
@@ -65,7 +65,15 @@ public class UserService {
         }
         Optional<Socio> socio = socioRepository.findByEmail(eMail);
         if (socio.isPresent()) {
-            if (!socio.get().getPassword().equals(password)) {
+            Socio foundSocio = socio.get();
+
+            // Verificar si el socio está activo
+            if (!foundSocio.getActivo()) {
+                return LoginStatus.SOCIO_NO_ACTIVO;
+            }
+
+            // Verificar contraseña
+            if (!foundSocio.getPassword().equals(password)) {
                 return LoginStatus.ERROR_PASSWORD;
             } else {
                 managerUserSession.logearUsuario(eMail);

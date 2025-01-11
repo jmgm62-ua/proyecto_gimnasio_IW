@@ -40,4 +40,8 @@ public class Socio extends User {
         this.fechaBaja = fechaBaja;
         this.Saldo = Saldo;
     }
+
+    public Boolean getActivo() {
+        return super.getActivo();
+    }
 }

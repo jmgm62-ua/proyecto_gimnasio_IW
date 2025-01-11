@@ -80,6 +80,9 @@ export default {
               case 'LOGIN_OK_WEBMASTER':
                 this.$router.push('/webmaster-profile');
                 break;
+              case 'SOCIO_NO_ACTIVO':
+                this.errorMessage = 'Tu cuenta no está activa. Contacta con un administrador.';
+                break;
             }
           }
         }
