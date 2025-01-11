@@ -167,7 +167,7 @@ public class UserService {
                 request.getDireccion(),
                 false, // activo = false hasta que el webmaster lo apruebe
                 request.getTipoCuota(),
-                LocalDate.now().toString(), // fecha alta = fecha actual
+                null,
                 null, // fecha baja = null
                 0.0f  // saldo inicial = 0
         );
