@@ -45,6 +45,12 @@ const router = createRouter({
       component: () => import('../views/MiPerfil-webmaster.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/all-actividades',
+      name: 'all-actividades',
+      component: () => import('../views/CalendarioAllActividades.vue'),
+      meta: { requiresAuth: true }
+    },
     
     
   ],
