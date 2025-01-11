@@ -22,6 +22,19 @@ public class ActividadData {
     private Date fechaInicio;
     private Date fechaFin;
 
+    public ActividadData(Long id, String nombre, String diaSemana, String horaInicio, String horaFin, Date fechaInicio, Date fechaFin) {
+        this.id = id;
+        this.nombre = nombre;
+        this.diaSemana = diaSemana;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+    }
+
+    public ActividadData() {
+    }
+
     public Long getId() {
         return id;
     }

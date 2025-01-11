@@ -20,10 +20,15 @@ public class Actividad {
 
     private String nombre;
     private String diaSemana;
+
+    @Column(name = "fecha_inicio")
+    private Date fechaInicio;
+
+    @Column(name = "fecha_fin")
+    private Date fechaFin;
+
     private String horaInicio;
     private String horaFin;
-    private Date fechaInicio;
-    private Date fechaFin;
 
     @ManyToMany(mappedBy = "actividades")
     Set<WebMaster> webMasters = new HashSet<>();
@@ -36,7 +41,8 @@ public class Actividad {
     @OneToMany(mappedBy = "actividad")
     private List<Reserva> reservas;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "monitor_id")
     private Monitor monitor;
 
     public Actividad() {

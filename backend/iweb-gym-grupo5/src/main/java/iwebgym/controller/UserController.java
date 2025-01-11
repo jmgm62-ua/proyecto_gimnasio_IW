@@ -96,6 +96,23 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getTareasMonitor")
+    public ResponseEntity<?> getTareasMonitor(@RequestParam String email) {
+        ArrayList<ActividadData> actividades = actividadesService.findActividadesByMonitorEmail(email);
+
+        if (actividades == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró el monitor con email: " + email);
+        }
+
+        if (actividades.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("El monitor no tiene actividades asignadas");
+        }
+
+        return ResponseEntity.ok(actividades);
+    }
+  
     @PutMapping("/actualizar-cuota/{email}")
     public ResponseEntity<?> actualizarTipoCuota(@PathVariable String email, @RequestBody Map<String, String> body) {
         String nuevaCuota = body.get("tipoCuota");
