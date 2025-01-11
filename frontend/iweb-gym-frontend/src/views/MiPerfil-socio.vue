@@ -56,7 +56,7 @@
               </div>
 
               <div class="text-center mt-4">
-                <router-link to="/mis-reservas" class="btn btn-primary">
+                <router-link to="/modificar-cuota" class="btn btn-primary">
                   Modificar tipo de suscripción
                 </router-link>
               </div>

@@ -132,4 +132,16 @@ public class UserService {
             return modelMapper.map(usuario, WebMasterData.class);
         }
     }
+
+    @Transactional
+    public boolean actualizarTipoCuota(String email, String nuevaCuota) {
+        Optional<Socio> socioOpt = socioRepository.findByEmail(email);
+        if (socioOpt.isPresent()) {
+            Socio socio = socioOpt.get();
+            socio.setTipoCuota(nuevaCuota);
+            socioRepository.save(socio);
+            return true;
+        }
+        return false;
+    }
 }

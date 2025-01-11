@@ -51,6 +51,12 @@ const router = createRouter({
       component: () => import('../views/CalendarioAllActividades.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/modificar-cuota',
+      name: 'ModificarCuota',
+      component: () => import('@/views/ModificarCuota.vue'),
+      meta: { requiresAuth: true }
+    }
     
     
   ],
