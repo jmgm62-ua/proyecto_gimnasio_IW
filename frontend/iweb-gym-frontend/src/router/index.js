@@ -56,6 +56,12 @@ const router = createRouter({
       name: 'mis-clases',
       component: () => import('../views/MisClases-monitor.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/ver-informes',
+      name: 'ver-informes',
+      component: () => import('../views/VerInformes.vue'),
+      meta: { requiresAuth: true }
     }
     
     
