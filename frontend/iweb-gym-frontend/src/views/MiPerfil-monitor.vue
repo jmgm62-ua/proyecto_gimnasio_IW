@@ -40,7 +40,7 @@
 
 
                 <div class="text-center mt-4">
-                  <router-link to="/mis-clases" class="btn btn-primary">
+                  <router-link to="/monitor/mis-clases" class="btn btn-primary">
                     Mis Clases
                   </router-link>
                 </div>

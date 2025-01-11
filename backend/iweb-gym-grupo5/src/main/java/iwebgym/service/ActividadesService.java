@@ -14,12 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ActividadesService {
 
     @Autowired
     private ActividadRepository actividadRepository;
+
+    @Autowired
+    private MonitorRepository monitorRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -35,6 +40,22 @@ public class ActividadesService {
         return actividadesData;
     }
 
+    public ArrayList<ActividadData> findActividadesByMonitorEmail(String email) {
+        Optional<Monitor> monitor = monitorRepository.findByEmail(email);
 
+        return monitor.map(value -> actividadRepository.findByMonitorId(value.getId())
+                        .stream()
+                        .map(actividad -> new ActividadData(
+                                actividad.getId(),
+                                actividad.getNombre(),
+                                actividad.getDiaSemana(),
+                                actividad.getHoraInicio(),
+                                actividad.getHoraFin(),
+                                actividad.getFechaInicio(),
+                                actividad.getFechaFin()
+                        ))
+                        .collect(Collectors.toCollection(ArrayList::new)))
+                .orElse(null);
+    }
 
 }

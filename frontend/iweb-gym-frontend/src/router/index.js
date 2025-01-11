@@ -51,6 +51,12 @@ const router = createRouter({
       component: () => import('../views/CalendarioAllActividades.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/monitor/mis-clases',
+      name: 'mis-clases',
+      component: () => import('../views/MisClases-monitor.vue'),
+      meta: { requiresAuth: true }
+    }
     
     
   ],
