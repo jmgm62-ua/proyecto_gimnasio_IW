@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +23,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private ActividadesService actividadesService;
+
 
     @GetMapping
     public List<User> getAllusers() {
@@ -90,6 +92,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay actividades");
         } else {
             return ResponseEntity.ok(actividades);
+        }
+    }
+
+    @PutMapping("/actualizar-cuota/{email}")
+    public ResponseEntity<?> actualizarTipoCuota(@PathVariable String email, @RequestBody Map<String, String> body) {
+        String nuevaCuota = body.get("tipoCuota");
+        boolean actualizado = userService.actualizarTipoCuota(email, nuevaCuota);
+
+        if (actualizado) {
+            return ResponseEntity.ok().body("Tipo de cuota actualizado correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo actualizar el tipo de cuota");
         }
     }
 }
