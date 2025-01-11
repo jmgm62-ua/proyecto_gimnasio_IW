@@ -1,35 +1,21 @@
 package iwebgym.dto;
 
-import java.util.List;
+import lombok.Data;
 
+import java.util.Date;
+
+@Data
 public class ActividadData {
 
     private Long id;
-    private String name;
-    private List<ActividadData> actividades;
-
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<ActividadData> getActividades() {
-        return actividades;
-    }
-
-    public void setActividades(List<ActividadData> actividades) {
-        this.actividades = actividades;
-    }
+    private String nombre;
+    private Date fechaInicio;
+    private Date fechaFin;
+    private String diaSemana;
+    private String horaInicio;
+    private String horaFin;
+    private Long numAsistentes;
+    // Calendar format specific fields
+    private Date start;
+    private Date end;
 }
