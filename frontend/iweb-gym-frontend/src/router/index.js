@@ -34,11 +34,25 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/mis-clases',
-      name: 'mis-clases',
-      component: () => import('../views/MisClases-monitor.vue'),
+      path: '/monitor-profile',
+      name: 'monitor_profile',
+      component: () => import('../views/MiPerfil-monitor.vue'),
       meta: { requiresAuth: true }
-    }
+    },
+    {
+      path: '/webmaster-profile',
+      name: 'webmaster-profile',
+      component: () => import('../views/MiPerfil-webmaster.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/all-actividades',
+      name: 'all-actividades',
+      component: () => import('../views/CalendarioAllActividades.vue'),
+      meta: { requiresAuth: true }
+    },
+    
+    
   ],
 })
 

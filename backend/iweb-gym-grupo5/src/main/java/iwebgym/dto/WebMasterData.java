@@ -1,10 +1,6 @@
 package iwebgym.dto;
 
-import iwebgym.dto.ActividadData;
-
-import java.util.List;
-
-public class MonitorData {
+public class WebMasterData {
 
     private Long id;
     private String name;
