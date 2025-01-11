@@ -52,6 +52,17 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/modificar-cuota',
+      name: 'ModificarCuota',
+      component: () => import('@/views/ModificarCuota.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/solicitud-socio',
+      name: 'SolicitudSocio',
+      component: () => import('@/views/SolicitudSocio.vue')
+    },
+    {
       path: '/monitor/mis-clases',
       name: 'mis-clases',
       component: () => import('../views/MisClases-monitor.vue'),
@@ -63,8 +74,6 @@ const router = createRouter({
       component: () => import('../views/VerInformes.vue'),
       meta: { requiresAuth: true }
     }
-    
-    
   ],
 })
 
