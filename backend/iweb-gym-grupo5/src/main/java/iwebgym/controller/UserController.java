@@ -2,6 +2,7 @@ package iwebgym.controller;
 
 import iwebgym.dto.*;
 import iwebgym.model.Actividad;
+import iwebgym.model.Socio;
 import iwebgym.model.User;
 import iwebgym.service.ActividadesService;
 import iwebgym.service.UserService;
@@ -104,6 +105,17 @@ public class UserController {
             return ResponseEntity.ok().body("Tipo de cuota actualizado correctamente");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo actualizar el tipo de cuota");
+        }
+    }
+
+    @PostMapping("/registro-socio")
+    public ResponseEntity<?> registroSocio(@RequestBody SocioRegistroRequestData request) {
+        try {
+            Socio nuevoSocio = userService.registrarNuevoSocio(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoSocio);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error al registrar el socio: " + e.getMessage());
         }
     }
 }

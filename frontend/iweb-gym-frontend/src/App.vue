@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item" >
-              <button class="nav-link" v-if="!isLoggedIn" >Hazte Socio</button>
+              <button class="nav-link" v-if="!isLoggedIn" @click="goToRequest">Hazte Socio</button>
             </li>
             <li class="nav-item" >
               <button class="nav-link" v-if="!isLoggedIn" @click="goToLogin">Inicia sesión</button>
@@ -76,12 +76,17 @@ export default {
           break;
       }
     };
+    const goToRequest = () => {
+      userStore.logOut();
+      router.push("/solicitud-socio")
+    };
 
     return {
       isLoggedIn,
       goToLogin,
       goToLogOut,
       goToMiPerfil,
+      goToRequest,
     };
   },
 };

@@ -1,10 +1,7 @@
 package iwebgym.service;
 
 import iwebgym.authentication.ManagerUserSession;
-import iwebgym.dto.MonitorData;
-import iwebgym.dto.SocioData;
-import iwebgym.dto.UserData;
-import iwebgym.dto.WebMasterData;
+import iwebgym.dto.*;
 import iwebgym.model.Monitor;
 import iwebgym.model.Socio;
 import iwebgym.model.User;
@@ -20,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -143,5 +141,29 @@ public class UserService {
             return true;
         }
         return false;
+    }
+    @Transactional
+    public Socio registrarNuevoSocio(SocioRegistroRequestData request) {
+        // Verificar si el email ya existe
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("El email ya está registrado");
+        }
+
+        // Crear nuevo socio
+        Socio socio = new Socio(
+                request.getName(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getFechaNacimiento(),
+                request.getTelefono(),
+                request.getDireccion(),
+                false, // activo = false hasta que el webmaster lo apruebe
+                request.getTipoCuota(),
+                LocalDate.now().toString(), // fecha alta = fecha actual
+                null, // fecha baja = null
+                0.0f  // saldo inicial = 0
+        );
+
+        return socioRepository.save(socio);
     }
 }
