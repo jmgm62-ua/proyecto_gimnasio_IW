@@ -135,4 +135,15 @@ public class UserController {
                     .body("Error al registrar el socio: " + e.getMessage());
         }
     }
+
+    @GetMapping("/getAllTareas/{type}")
+    public ResponseEntity<?> getAllTareas(@PathVariable String type) {
+        ArrayList<ActividadData> actividades = actividadesService.findAllActividadesTipo(type);
+
+        if (actividades == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay actividades");
+        } else {
+            return ResponseEntity.ok(actividades);
+        }
+    }
 }

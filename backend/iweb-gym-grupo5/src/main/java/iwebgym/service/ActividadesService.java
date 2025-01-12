@@ -28,6 +28,7 @@ public class ActividadesService {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @Transactional(readOnly = true)
     public ArrayList<ActividadData> findAllActividades() {
         List<Actividad> listaActividades = actividadRepository.findAll();
@@ -56,6 +57,22 @@ public class ActividadesService {
                         ))
                         .collect(Collectors.toCollection(ArrayList::new)))
                 .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public ArrayList<ActividadData> findAllActividadesTipo(String type) {
+        List<Actividad> listaActividades = actividadRepository.findAll();
+        ArrayList<ActividadData> actividadesData = new ArrayList<>();
+        for (Actividad a : listaActividades) {
+            ActividadData actividadData = new ActividadData();
+            TipoActividad tipoActividad = a.getTipoActividad();
+            int id_tipo = Integer.parseInt(tipoActividad.getNombre());
+            if (type.equals(tipoActividad.ObtenerNombreById(id_tipo))){
+                actividadData = modelMapper.map(a, ActividadData.class);
+                actividadesData.add(actividadData);
+            }
+        }
+        return actividadesData;
     }
 
 }
