@@ -14,17 +14,17 @@ public interface SocioRepository extends JpaRepository<Socio, Long> {
     @Query("SELECT s FROM Socio s WHERE s.email = :email")
     Optional<Socio> findByEmail(@Param("email") String email);
 
-    @Query("SELECT COUNT(s) FROM Socio s WHERE s.activo = true " +
-            "AND (s.fechaBaja IS NULL OR s.fechaBaja >= :fecha)")
+    @Query("SELECT s FROM Socio s WHERE s.activo = true AND s.fechaAlta <= :fecha AND (s.fechaBaja IS NULL OR s.fechaBaja > :fecha)")
+    List<Socio> findActiveSociosAtDate(@Param("fecha") String fecha);
+
+    @Query("SELECT COUNT(s) FROM Socio s WHERE s.activo = true AND s.fechaAlta <= :fecha AND (s.fechaBaja IS NULL OR s.fechaBaja > :fecha)")
     Long countActiveSociosAtDate(@Param("fecha") String fecha);
 
-    @Query("SELECT COUNT(s) FROM Socio s WHERE " +
-            "s.fechaAlta BETWEEN :fechaInicio AND :fechaFin")
-    Long countNewSociosBetweenDates(
-            @Param("fechaInicio") String fechaInicio,
-            @Param("fechaFin") String fechaFin
-    );
+    @Query("SELECT s FROM Socio s WHERE s.fechaAlta BETWEEN :fechaInicio AND :fechaFin")
+    List<Socio> findNewSociosBetweenDates(@Param("fechaInicio") String fechaInicio, @Param("fechaFin") String fechaFin);
+
+    @Query("SELECT COUNT(s) FROM Socio s WHERE s.fechaAlta BETWEEN :fechaInicio AND :fechaFin")
+    Long countNewSociosBetweenDates(@Param("fechaInicio") String fechaInicio, @Param("fechaFin") String fechaFin);
 
     List<Socio> findAll();
-
 }

@@ -30,4 +30,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             @Param("fechaInicio") Date fechaInicio,
             @Param("fechaFin") Date fechaFin
     );
+
+    List<Reserva> findByFechaBetween(Date fechaInicio, Date fechaFin);
 }
