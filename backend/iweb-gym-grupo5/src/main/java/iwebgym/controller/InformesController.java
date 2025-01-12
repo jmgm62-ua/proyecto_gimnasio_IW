@@ -42,6 +42,9 @@ public class InformesController {
             case "altas":
                 informe = informesService.getInformeAltas(tipo, mes, año);
                 break;
+            case "ingresos":
+                informe = informesService.getInformeIngresos(tipo, mes, año);
+                break;
             default:
                 return ResponseEntity.badRequest().body(Map.of("error", "Tipo de informe no válido."));
         }

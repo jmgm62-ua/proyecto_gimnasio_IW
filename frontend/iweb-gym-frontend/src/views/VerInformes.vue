@@ -193,6 +193,43 @@
         </div>
       </div>
 
+      <!-- Informe de Ingresos -->
+      <div v-if="tipoInforme === 'ingresos'" class="space-y-6">
+        <div>
+          <h3 class="font-bold text-lg mb-2">Resumen de Ingresos</h3>
+          <p class="mb-2">Total de Ingresos: {{ informe.totalIngresos }}€</p>
+
+          <!-- Tabla de ingresos -->
+          <div class="mt-6">
+            <h4 class="font-semibold mb-2">Detalle de Ingresos:</h4>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border">
+                <thead>
+                  <tr class="bg-gray-100">
+                    <th class="p-2 border">ID</th>
+                    <th class="p-2 border">Concepto</th>
+                    <th class="p-2 border">Fecha</th>
+                    <th class="p-2 border">Importe</th>
+                    <th class="p-2 border">Método de Pago</th>
+                    <th class="p-2 border">Socio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="ingreso in informe.ingresos" :key="ingreso.id">
+                    <td class="p-2 border">{{ ingreso.id }}</td>
+                    <td class="p-2 border">{{ ingreso.concepto }}</td>
+                    <td class="p-2 border">{{ ingreso.fecha }}</td>
+                    <td class="p-2 border">{{ ingreso.importe }}€</td>
+                    <td class="p-2 border">{{ ingreso.metodoPago }}</td>
+                    <td class="p-2 border">{{ ingreso.socio?.nombre || 'N/A' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>

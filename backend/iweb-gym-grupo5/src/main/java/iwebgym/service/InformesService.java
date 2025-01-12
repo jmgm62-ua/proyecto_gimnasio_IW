@@ -1,5 +1,6 @@
 package iwebgym.service;
 
+import iwebgym.model.Ingreso;
 import iwebgym.model.Reserva;
 import iwebgym.model.Socio;
 import iwebgym.repository.ReservaRepository;
@@ -7,6 +8,7 @@ import iwebgym.repository.SocioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +20,9 @@ public class InformesService {
 
     @Autowired
     private SocioRepository sociosRepository;
+
+    @Autowired
+    private IngresoService ingresoService;
 
     public Map<String, Object> getInformeAsistencia(String tipo, Integer mes, Integer año) {
         Map<String, Object> informe = new HashMap<>();
@@ -161,6 +166,39 @@ public class InformesService {
         informe.put("fechaFin", fechaFin);
         informe.put("totalNuevasAltas", (long) nuevosAltas.size());
         informe.put("detallesAltas", detallesAltas);
+
+        return informe;
+    }
+
+    public Map<String, Object> getInformeIngresos(String tipo, Integer mes, Integer año) {
+        Map<String, Object> informe = new HashMap<>();
+        Date fechaInicio;
+        Date fechaFin;
+
+        // Configurar fechas según el tipo de informe
+        Calendar cal = Calendar.getInstance();
+        if (tipo.equals("mensual")) {
+            cal.set(año, mes - 1, 1, 0, 0, 0);
+            fechaInicio = cal.getTime();
+            cal.add(Calendar.MONTH, 1);
+            cal.add(Calendar.SECOND, -1);
+            fechaFin = cal.getTime();
+        } else {
+            cal.set(año, 0, 1, 0, 0, 0);
+            fechaInicio = cal.getTime();
+            cal.add(Calendar.YEAR, 1);
+            cal.add(Calendar.SECOND, -1);
+            fechaFin = cal.getTime();
+        }
+
+        List<Ingreso> ingresos = ingresoService.getIngresosBetweenFechas(fechaInicio, fechaFin);
+        BigDecimal totalIngresos = ingresoService.getTotalIngresosBetweenFechas(fechaInicio, fechaFin);
+
+        informe.put("periodo", tipo);
+        informe.put("fechaInicio", fechaInicio);
+        informe.put("fechaFin", fechaFin);
+        informe.put("ingresos", ingresos);
+        informe.put("totalIngresos", totalIngresos);
 
         return informe;
     }
