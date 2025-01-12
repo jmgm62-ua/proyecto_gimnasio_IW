@@ -22,6 +22,7 @@ export const useUserStore = defineStore('user', {
     // Establecer la actividad a reservar
     setActividadAReservar(actividad) {
       this.actividad_a_reservar = actividad;
+      console.log(actividad)
     },
     // Marcar la sesión como activa
     setIsLoggedIn() {
