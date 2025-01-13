@@ -2,16 +2,15 @@ package iwebgym.controller;
 
 import iwebgym.dto.ActividadData;
 import iwebgym.dto.ReservaData;
+import iwebgym.dto.ReservaRequest;
 import iwebgym.dto.StringIntTuple;
+import iwebgym.model.Reserva;
 import iwebgym.service.ActividadesService;
 import iwebgym.service.ReservaService;
 import iwebgym.service.TipoActividadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,5 +50,16 @@ public class ReservaController {
     public ResponseEntity<ActividadData> getTareaByID(@PathVariable Long id_actividad) {
         ActividadData actividadData = actividadesService.finByID(id_actividad);
         return ResponseEntity.ok(actividadData);
+    }
+
+    @PostMapping("/realiza_reserva")
+    public ResponseEntity<String> realizarReserva(@RequestBody ReservaRequest reservaRequest) {
+        try {
+
+            reservaService.crearReserva(reservaRequest);
+            return ResponseEntity.ok("Reserva realizada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al realizar la reserva: " + e.getMessage());
+        }
     }
 }

@@ -5,9 +5,9 @@
       <p><strong>Nombre de la Actividad:</strong> {{ actividad.nombre }}</p>
       <p><strong>Día de la Semana:</strong> {{ actividad.diaSemana }}</p>
       <p><strong>Horario:</strong> {{ actividad.horaInicio }} - {{ actividad.horaFin }}</p>
-      <p><strong>Fecha Seleccionada:</strong> {{ userStore.fecha_seleccionada }}</p>
+      <p><strong>Fecha Seleccionada:</strong> {{ formatearFecha(userStore.fecha_seleccionada) }}</p>
       <p><strong>Tipo de Actividad:</strong> {{ actividad.tipo_de_actividad }}</p>
-      <p><strong>Precio:</strong> €{{ actividad.precio_extra_actividad }}</p>
+      <p><strong>Precio Extra:</strong> €{{ actividad.precio_extra_actividad }}</p>
     </div>
     <div v-else class="loading">
       <p>Cargando detalles de la actividad...</p>
@@ -46,9 +46,46 @@ export default {
       }
     };
 
-    const confirmarReserva = () => {
-      alert(`Reserva confirmada para la actividad: ${actividad.value.nombre}`);
-      router.push("/");
+    const formatearFecha = (fecha) => {
+      if (!fecha) return "Fecha no seleccionada";
+      const date = new Date(fecha);
+      return date.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    };
+
+    // Función para confirmar la reserva y hacer la petición POST
+    const confirmarReserva = async () => {
+      try {
+        const idActividad = userStore.actividad_a_reservar?.id;
+        const emailUsuario = userStore.email;
+        const fechaSeleccionada = userStore.fecha_seleccionada;
+        const horaInicio = actividad.value.horaInicio; // Usamos la hora de inicio de la actividad
+
+        if (!idActividad || !emailUsuario || !fechaSeleccionada || !horaInicio) {
+          alert("Faltan datos necesarios para realizar la reserva.");
+          return;
+        }
+
+        const reservaData = {
+          idActividad,
+          email: emailUsuario,
+          horaInicio,
+          fechaSeleccionada,
+        };
+
+        const response = await axios.post(`${baseUrl}/reservas/realiza_reserva`, reservaData);
+        
+        if (response.status === 200) {
+          alert("Reserva confirmada correctamente.");
+          router.push("/"); // Redirige a la página principal o donde sea necesario
+        }
+      } catch (error) {
+        console.error("Error al realizar la reserva:", error);
+        alert("Hubo un problema al realizar la reserva.");
+      }
     };
 
     const cancelarReserva = () => {
@@ -63,12 +100,15 @@ export default {
     return {
       actividad,
       userStore,
+      formatearFecha,
       confirmarReserva,
       cancelarReserva,
     };
   },
 };
 </script>
+
+
 
 <style scoped>
 .container {

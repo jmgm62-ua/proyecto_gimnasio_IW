@@ -28,6 +28,8 @@ public class Reserva {
 
     }
 
+
+
     public Reserva(Date fecha, Actividad actividad, Socio socio) {
         this.fecha = fecha;
         this.actividad = actividad;
