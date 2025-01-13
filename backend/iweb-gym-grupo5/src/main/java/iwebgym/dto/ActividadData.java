@@ -21,6 +21,8 @@ public class ActividadData {
     private String horaFin;
     private Date fechaInicio;
     private Date fechaFin;
+    public String tipo_de_actividad;
+    public double precio_extra_actividad;
 
     public ActividadData(Long id, String nombre, String diaSemana, String horaInicio, String horaFin, Date fechaInicio, Date fechaFin) {
         this.id = id;

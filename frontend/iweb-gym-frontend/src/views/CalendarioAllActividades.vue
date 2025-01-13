@@ -31,6 +31,7 @@ export default {
     const calendar = ref(null);
     const tiposActividades = ref([]);
     const baseUrl = "http://localhost:8080";
+    const router = useRouter();
 
     // Obtener tipos de actividades
     const fetchTiposActividades = async () => {
@@ -116,19 +117,29 @@ export default {
         height: "auto",
         eventClick: function (info) {
           const actividad = info.event.extendedProps;
-          useUserStore().setActividadAReservar(actividad)
+          
+          // Formatear la fecha al estilo dd/mm/yyyy
+          const fechaEvento = info.event.start.toLocaleDateString("es-ES", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          });
 
-          // Crear un cuadro de diálogo personalizado
           const iniciarReserva = confirm(
-            `¿Deseas iniciar la reserva para: ${actividad.nombre}?`
+            `Has hecho clic en el evento "${actividad.nombre}" que ocurre el ${fechaEvento}. 
+            ¿Deseas iniciar la reserva?`
           );
 
           if (iniciarReserva) {
-            router.push("reservar")
+            useUserStore().setActividadAReservar(actividad);
+            useUserStore().setFechaSeleccionada(fechaEvento)
+            alert(fechaEvento)
+            router.push("/ver-detalles");
           } else {
             console.log("Reserva cancelada.");
           }
         }
+
 
       });
 

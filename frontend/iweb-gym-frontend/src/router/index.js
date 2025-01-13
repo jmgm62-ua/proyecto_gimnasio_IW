@@ -79,7 +79,13 @@ const router = createRouter({
       name: 'tienda',
       component: () => import('../views/OnlineStore.vue'),
       meta: { requiresAuth: true }
-    }
+    },
+    {
+      path: "/ver-detalles",
+      name: "VerDetalles",
+      component: () => import("@/views/ConfirmarReserva.vue"),
+    },
+    
   ],
 })
 

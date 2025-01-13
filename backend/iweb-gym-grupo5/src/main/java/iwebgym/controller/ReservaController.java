@@ -1,7 +1,9 @@
 package iwebgym.controller;
 
+import iwebgym.dto.ActividadData;
 import iwebgym.dto.ReservaData;
 import iwebgym.dto.StringIntTuple;
+import iwebgym.service.ActividadesService;
 import iwebgym.service.ReservaService;
 import iwebgym.service.TipoActividadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class ReservaController {
     private ReservaService reservaService;
     @Autowired
     private TipoActividadService tipoActividadService;
+    @Autowired
+    private ActividadesService actividadesService;
 
     @GetMapping("/historicas/{email}")
     public ResponseEntity<List<ReservaData>> getReservasHistoricas(@PathVariable String email) {
@@ -41,5 +45,11 @@ public class ReservaController {
     @GetMapping("/get_data_of_tipo/{id_actividad}")
     public ResponseEntity<StringIntTuple> getReservasHistoricas(@PathVariable Long id_actividad) {
         return ResponseEntity.ok(tipoActividadService.findNameAndPrice(id_actividad));
+    }
+
+    @GetMapping("/actividad/{id_actividad}")
+    public ResponseEntity<ActividadData> getTareaByID(@PathVariable Long id_actividad) {
+        ActividadData actividadData = actividadesService.finByID(id_actividad);
+        return ResponseEntity.ok(actividadData);
     }
 }

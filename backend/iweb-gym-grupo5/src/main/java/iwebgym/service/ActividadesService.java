@@ -27,6 +27,8 @@ public class ActividadesService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private TipoActividadService tipoActividadService;
 
 
     @Transactional(readOnly = true)
@@ -73,6 +75,20 @@ public class ActividadesService {
             }
         }
         return actividadesData;
+    }
+
+    @Transactional(readOnly = true)
+    public ActividadData finByID(Long id_buscada) {
+        Optional<Actividad> actividad = actividadRepository.findById(id_buscada);
+
+        ActividadData actividadData;
+
+        actividadData = modelMapper.map(actividad.get(), ActividadData.class);
+        StringIntTuple tuple = tipoActividadService.findNameAndPrice(actividadData.getId());
+        actividadData.tipo_de_actividad = tuple.getNombre();
+        actividadData.precio_extra_actividad =tuple.getPrice();
+
+        return actividadData;
     }
 
 }
