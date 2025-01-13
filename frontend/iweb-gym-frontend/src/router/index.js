@@ -73,6 +73,12 @@ const router = createRouter({
       name: 'ver-informes',
       component: () => import('../views/VerInformes.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/tienda',
+      name: 'tienda',
+      component: () => import('../views/OnlineStore.vue'),
+      meta: { requiresAuth: true }
     }
   ],
 })
