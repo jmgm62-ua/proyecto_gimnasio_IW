@@ -2,12 +2,14 @@ package iwebgym.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "reservas")
 @Getter
+@ToString(exclude = "socio")
 public class Reserva {
 
     @Id
@@ -27,6 +29,8 @@ public class Reserva {
     public Reserva() {
 
     }
+
+
 
     public Reserva(Date fecha, Actividad actividad, Socio socio) {
         this.fecha = fecha;

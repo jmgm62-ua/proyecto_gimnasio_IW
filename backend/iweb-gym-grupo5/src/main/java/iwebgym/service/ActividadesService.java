@@ -14,14 +14,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ActividadesService {
 
     @Autowired
     private ActividadRepository actividadRepository;
+
+    @Autowired
+    private MonitorRepository monitorRepository;
+
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private TipoActividadService tipoActividadService;
+
 
     @Transactional(readOnly = true)
     public ArrayList<ActividadData> findAllActividades() {
@@ -35,6 +43,52 @@ public class ActividadesService {
         return actividadesData;
     }
 
+    public ArrayList<ActividadData> findActividadesByMonitorEmail(String email) {
+        Optional<Monitor> monitor = monitorRepository.findByEmail(email);
 
+        return monitor.map(value -> actividadRepository.findByMonitorId(value.getId())
+                        .stream()
+                        .map(actividad -> new ActividadData(
+                                actividad.getId(),
+                                actividad.getNombre(),
+                                actividad.getDiaSemana(),
+                                actividad.getHoraInicio(),
+                                actividad.getHoraFin(),
+                                actividad.getFechaInicio(),
+                                actividad.getFechaFin()
+                        ))
+                        .collect(Collectors.toCollection(ArrayList::new)))
+                .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public ArrayList<ActividadData> findAllActividadesTipo(String type) {
+        List<Actividad> listaActividades = actividadRepository.findAll();
+        ArrayList<ActividadData> actividadesData = new ArrayList<>();
+        for (Actividad a : listaActividades) {
+            ActividadData actividadData = new ActividadData();
+            TipoActividad tipoActividad = a.getTipoActividad();
+            int id_tipo = Integer.parseInt(tipoActividad.getNombre());
+            if (type.equals(tipoActividad.ObtenerNombreById(id_tipo))){
+                actividadData = modelMapper.map(a, ActividadData.class);
+                actividadesData.add(actividadData);
+            }
+        }
+        return actividadesData;
+    }
+
+    @Transactional(readOnly = true)
+    public ActividadData finByID(Long id_buscada) {
+        Optional<Actividad> actividad = actividadRepository.findById(id_buscada);
+
+        ActividadData actividadData;
+
+        actividadData = modelMapper.map(actividad.get(), ActividadData.class);
+        StringIntTuple tuple = tipoActividadService.findNameAndPrice(actividadData.getId());
+        actividadData.tipo_de_actividad = tuple.getNombre();
+        actividadData.precio_extra_actividad =tuple.getPrice();
+
+        return actividadData;
+    }
 
 }

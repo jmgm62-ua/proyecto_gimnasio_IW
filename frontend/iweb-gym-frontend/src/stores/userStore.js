@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', {
     tipo_suscripcion: null, // Tipo de suscripcion del usuario
     direccion: null,
     actividad_a_reservar: null,
+    fecha_seleccionada: null,
   }),
   actions: {
     // Establecer el tipo de usuario
@@ -22,10 +23,14 @@ export const useUserStore = defineStore('user', {
     // Establecer la actividad a reservar
     setActividadAReservar(actividad) {
       this.actividad_a_reservar = actividad;
+      console.log(actividad)
     },
     // Marcar la sesión como activa
     setIsLoggedIn() {
       this.isLoggedIn = true;
+    },
+    setFechaSeleccionada(fecha_nueva) {
+      this.fecha_seleccionada = fecha_nueva
     },
     // Cerrar sesión
     logOut() {

@@ -25,8 +25,13 @@
             </li>
 
             <li class="nav-item" >
+              <button class="nav-link" v-if="isLoggedIn" @click="goToReservar">Realizar reserva</button>
+            </li>
+
+            <li class="nav-item" >
               <button class="nav-link" v-if="isLoggedIn" @click="goToMiPerfil">Mi perfil</button>
             </li>
+            
             <li class="nav-item" >
               <button class="nav-link" v-if="isLoggedIn" @click="goToLogOut">Cierra sesion</button>
             </li>
@@ -68,6 +73,10 @@ export default {
       userStore.logOut();
       router.push("/")
     };
+    
+    const goToReservar = () => {
+      router.push("/all-actividades")
+    };
 
     const goToMiPerfil = () => {
       switch (userStore.userType) {
@@ -87,6 +96,7 @@ export default {
       goToLogOut,
       goToMiPerfil,
       goToRequest,
+      goToReservar,
     };
   },
 };

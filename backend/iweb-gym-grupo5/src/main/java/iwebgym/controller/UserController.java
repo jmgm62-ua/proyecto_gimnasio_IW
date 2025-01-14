@@ -96,6 +96,23 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getTareasMonitor")
+    public ResponseEntity<?> getTareasMonitor(@RequestParam String email) {
+        ArrayList<ActividadData> actividades = actividadesService.findActividadesByMonitorEmail(email);
+
+        if (actividades == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró el monitor con email: " + email);
+        }
+
+        if (actividades.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("El monitor no tiene actividades asignadas");
+        }
+
+        return ResponseEntity.ok(actividades);
+    }
+  
     @PutMapping("/actualizar-cuota/{email}")
     public ResponseEntity<?> actualizarTipoCuota(@PathVariable String email, @RequestBody Map<String, String> body) {
         String nuevaCuota = body.get("tipoCuota");
@@ -118,4 +135,51 @@ public class UserController {
                     .body("Error al registrar el socio: " + e.getMessage());
         }
     }
+
+    @GetMapping("/getAllTareas/{type}")
+    public ResponseEntity<?> getAllTareas(@PathVariable String type) {
+        ArrayList<ActividadData> actividades = actividadesService.findAllActividadesTipo(type);
+
+        if (actividades == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay actividades");
+        } else {
+            return ResponseEntity.ok(actividades);
+        }
+    }
+
+    @GetMapping("/cargar_saldo/{referencia}/{saldo_a_cargar}/{email}")
+    public ResponseEntity<?> cargarSaldo(
+            @PathVariable String referencia,
+            @PathVariable float saldo_a_cargar,
+            @PathVariable String email
+    ) {
+        try {
+            userService.cargar_saldo(referencia, saldo_a_cargar, email);
+            return ResponseEntity.ok().body(
+                    "<html><body><h3>Saldo correctamente cargado.</h3>" +
+                            "<p>Pulsa <a href=\"http://localhost:5173/\">aquí</a> para volver a la página del gimnasio.</p></body></html>"
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    "<html><body><h3>Error al cargar el saldo:</h3>" +
+                            "<p>" + e.getMessage() + "</p>" +
+                            "<p>Por favor, intenta nuevamente o contacta con soporte.</p></body></html>"
+            );
+        }
+    }
+
+
+    @GetMapping("/registrar_referencia/{referencia}")
+    public ResponseEntity<?> registrar_referencia(
+            @PathVariable String referencia
+    ) {
+        try {
+            userService.registrarNuevaReferencia(referencia);
+        }catch (Exception e){
+            return ResponseEntity.ok("Referencia ya existente, no se registra");
+        }
+
+        return ResponseEntity.ok("Referencia registrada");
+    }
+
 }

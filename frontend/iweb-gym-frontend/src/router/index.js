@@ -61,8 +61,30 @@ const router = createRouter({
       path: '/solicitud-socio',
       name: 'SolicitudSocio',
       component: () => import('@/views/SolicitudSocio.vue')
-    }
-    
+    },
+    {
+      path: '/monitor/mis-clases',
+      name: 'mis-clases',
+      component: () => import('../views/MisClases-monitor.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/ver-informes',
+      name: 'ver-informes',
+      component: () => import('../views/VerInformes.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/tienda',
+      name: 'tienda',
+      component: () => import('../views/OnlineStore.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/ver-detalles",
+      name: "VerDetalles",
+      component: () => import("@/views/ConfirmarReserva.vue"),
+    },
     
   ],
 })
