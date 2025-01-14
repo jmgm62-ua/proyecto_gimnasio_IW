@@ -68,7 +68,11 @@ const router = createRouter({
       name: 'AsistentesActividad',
       component: () => import('../views/listaAsistentes.vue'),
     },
-
+    {
+      path: '/usuarios-activos',
+      name: 'UsuariosActivos',
+      component: () => import('../views/SociosActivos.vue'),
+    },
 
 
 

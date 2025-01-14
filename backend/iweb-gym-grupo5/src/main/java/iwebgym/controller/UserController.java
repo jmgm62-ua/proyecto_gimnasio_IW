@@ -6,6 +6,7 @@ import iwebgym.dto.UserData;
 import iwebgym.dto.WebMasterData;
 import iwebgym.model.User;
 import iwebgym.service.UserService;
+import iwebgym.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
+    @Autowired
+    private SocioRepository socioRepository;
 
     @Autowired
     private UserService userService;
@@ -114,5 +117,27 @@ public class UserController {
     public ResponseEntity<Void> rejectUser(@PathVariable Long id) {
         userService.rejectUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Lista de usuarios activos
+    @GetMapping("/activos")
+    public ResponseEntity<List<Socio>> getActiveMembers() {
+        List<Socio> activeMembers = socioRepository.findByActivoTrue();
+        return ResponseEntity.ok(activeMembers);
+    }
+
+    // Desactiva un usuario
+    @PutMapping("/{id}/desactivar")
+    public ResponseEntity<String> deactivateMember(@PathVariable Long id) {
+        Optional<Socio> optionalSocio = socioRepository.findById(id);
+        if (optionalSocio.isPresent()) {
+            Socio socio = optionalSocio.get();
+            socio.setActivo(false);
+            socio.setFechaBaja(LocalDate.now().toString()); // Establecer la fecha de baja
+            socioRepository.save(socio);
+            return ResponseEntity.ok("Socio desactivado con éxito");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Socio no encontrado");
+        }
     }
 }

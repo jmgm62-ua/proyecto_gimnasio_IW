@@ -16,4 +16,5 @@ public interface SocioRepository extends JpaRepository<Socio, Long> {
 
     List<Socio> findAll();
 
+    List<Socio> findByActivoTrue();
 }
