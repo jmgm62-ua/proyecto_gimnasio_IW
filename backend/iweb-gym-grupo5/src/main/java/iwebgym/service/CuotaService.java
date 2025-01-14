@@ -65,7 +65,7 @@ public class CuotaService {
     @Scheduled(cron = "0 0 0 1 * *")  // Esto ejecuta el método el 1er día de cada mes a las 00:00
     public void descontarCuota() {
         LocalDate fechaActual = LocalDate.now();
-        if (fechaActual.getDayOfMonth() == 14) {
+        if (fechaActual.getDayOfMonth() == 1) {
             List<Socio> lista_socios = socioRepository.findAll();
 
             for (Socio socio : lista_socios){
