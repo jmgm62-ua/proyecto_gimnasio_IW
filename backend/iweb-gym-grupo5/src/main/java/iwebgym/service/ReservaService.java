@@ -70,9 +70,6 @@ public class ReservaService {
         socio.setSaldo(saldo_socio.floatValue());
         socioRepository.save(socio);
 
-        Ingreso ingreso_nuevo = new Ingreso();
-        ingreso_nuevo.setCantidad(new BigDecimal(price));
-        ingreso_nuevo.setReferencia("Cobro_actividad_" + actividad.getId() + "_" + socio.getEmail() + "_" + reservaRequest.getFechaSeleccionada());
         String fechaString = reservaRequest.getFechaSeleccionada();
         String horaString = reservaRequest.getHoraInicio();
 
@@ -82,9 +79,7 @@ public class ReservaService {
         LocalDate fechaLocal = LocalDate.parse(fechaString, dateFormatter);
         LocalTime horaLocal = LocalTime.parse(horaString, timeFormatter);
         LocalDateTime fechaHoraSeleccionada = LocalDateTime.of(fechaLocal, horaLocal);
-
-        ingreso_nuevo.setFecha(java.sql.Timestamp.valueOf(LocalDateTime.now()));
-        ingresoService.saveIngreso(ingreso_nuevo);
+        
 
         Date fechaReserva = Date.from(fechaHoraSeleccionada.atZone(ZoneId.systemDefault()).toInstant());
         Reserva reserva = new Reserva(fechaReserva, actividad, socio);

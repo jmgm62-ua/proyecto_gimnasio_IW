@@ -80,7 +80,7 @@ export default {
         
         if (response.status === 200) {
           alert("Reserva confirmada correctamente.");
-          router.push("/"); // Redirige a la página principal o donde sea necesario
+          router.push("mis-reservas");
         }
       } catch (error) {
         console.error("Error al realizar la reserva:", error);
