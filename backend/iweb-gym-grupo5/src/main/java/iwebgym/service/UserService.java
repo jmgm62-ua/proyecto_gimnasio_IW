@@ -2,14 +2,8 @@ package iwebgym.service;
 
 import iwebgym.authentication.ManagerUserSession;
 import iwebgym.dto.*;
-import iwebgym.model.Monitor;
-import iwebgym.model.Socio;
-import iwebgym.model.User;
-import iwebgym.model.WebMaster;
-import iwebgym.repository.MonitorRepository;
-import iwebgym.repository.SocioRepository;
-import iwebgym.repository.UserRepository;
-import iwebgym.repository.WebMasterRepository;
+import iwebgym.model.*;
+import iwebgym.repository.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +24,10 @@ public class UserService {
 
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
+    private IngresoRepository ingresoRepository;
+    @Autowired
+    private IngresoPendienteRepository ingresoPendienteRepository;
 
     public enum LoginStatus {LOGIN_OK_SOCIO,LOGIN_OK_MONITOR,LOGIN_OK_WEBMASTER, USER_NOT_FOUND, ERROR_PASSWORD, SOCIO_NO_ACTIVO}
 
@@ -173,5 +175,75 @@ public class UserService {
         );
 
         return socioRepository.save(socio);
+    }
+
+
+    @Transactional
+    public boolean cargar_saldo(String referencia, float nuevo_saldo, String email) throws Exception {
+        List<IngresoPendiente> ingresoPendientes = ingresoPendienteRepository.findAll();
+        boolean pendiete_de_pago = false;
+
+        List<Ingreso> lista_ingresos = ingresoRepository.findAll();
+
+        for (Ingreso ingreso_a_revisar :  lista_ingresos){
+            if (ingreso_a_revisar.getReferencia().equals(referencia)){
+                throw new Exception("Este ingreso ya ha sido realizado");
+            }
+        }
+
+        Socio socio_a_cargar_saldo = new Socio();
+
+        try{
+            socio_a_cargar_saldo = socioRepository.findByEmail(email).get();
+        } catch (Exception e) {
+            throw new Exception("Usuario no encontrado");
+        }
+
+        for (IngresoPendiente ip : ingresoPendientes){
+            if(ip.getReferencia().equals(referencia)){
+                pendiete_de_pago = true;
+                ingresoPendienteRepository.delete(ip);
+            }
+        }
+
+        if (pendiete_de_pago == false){
+            throw new Exception("Este ingreso de saldo no se puede hacer");
+        }
+
+        Ingreso nuevo_ingreso = new Ingreso();
+
+        ZonedDateTime madridTime = ZonedDateTime.now(ZoneId.of("Europe/Madrid"));
+        Date fechaActual = Date.from(madridTime.toInstant());
+        nuevo_ingreso.setFecha(fechaActual);
+        nuevo_ingreso.setCantidad(new BigDecimal(nuevo_saldo));
+        nuevo_ingreso.setReferencia(referencia);
+
+        ingresoRepository.save(nuevo_ingreso);
+        float saldo_actual = socio_a_cargar_saldo.getSaldo();
+        socio_a_cargar_saldo.setSaldo(saldo_actual + nuevo_saldo);
+
+        socioRepository.save(socio_a_cargar_saldo);
+
+        return true;
+    }
+
+
+
+    @Transactional
+    public boolean registrarNuevaReferencia(String referencia) throws Exception {
+
+        List<IngresoPendiente> ingresosPendientes_list = ingresoPendienteRepository.findAll();
+        for (IngresoPendiente ip : ingresosPendientes_list){
+            if(ip.getReferencia().equals(referencia)){
+                throw new Exception("Esta referencia ya existe");
+            }
+        }
+
+        IngresoPendiente ingresoPendiente = new IngresoPendiente();
+        ingresoPendiente.setReferencia(referencia);
+
+        ingresoPendienteRepository.save(ingresoPendiente);
+
+        return true;
     }
 }

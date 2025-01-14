@@ -79,7 +79,7 @@ public class ReservaService {
         LocalDate fechaLocal = LocalDate.parse(fechaString, dateFormatter);
         LocalTime horaLocal = LocalTime.parse(horaString, timeFormatter);
         LocalDateTime fechaHoraSeleccionada = LocalDateTime.of(fechaLocal, horaLocal);
-        
+
 
         Date fechaReserva = Date.from(fechaHoraSeleccionada.atZone(ZoneId.systemDefault()).toInstant());
         Reserva reserva = new Reserva(fechaReserva, actividad, socio);
