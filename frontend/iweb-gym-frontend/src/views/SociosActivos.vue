@@ -86,3 +86,81 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+/* Contenedor principal */
+.active-users {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+h1 {
+  color: #333;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Lista de usuarios */
+.user-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-item:hover {
+  background-color: #f1f1f1;
+}
+
+.user-details {
+  flex-grow: 1;
+}
+
+.user-details p {
+  margin: 5px 0;
+  color: #555;
+}
+
+/* Botón de desactivación */
+.deactivate-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.deactivate-btn:hover {
+  background-color: #d32f2f;
+}
+
+.deactivate-btn:focus {
+  outline: none;
+}
+
+/* Mensaje si no hay usuarios */
+.no-users {
+  text-align: center;
+  color: #777;
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+</style>
