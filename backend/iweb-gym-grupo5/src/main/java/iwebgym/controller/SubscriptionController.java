@@ -35,4 +35,16 @@ public class SubscriptionController {
         Subscription newSubscription = subscriptionService.createSubscription(subscriptionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSubscription);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSubscription(@PathVariable Long id) {
+        try {
+            subscriptionService.deleteSubscriptionById(id);
+            return ResponseEntity.ok("Suscripción eliminada con éxito.");
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Suscripción no encontrada.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la suscripción.");
+        }
+    }
 }

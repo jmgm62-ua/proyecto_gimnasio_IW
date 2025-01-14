@@ -36,5 +36,12 @@ public class SubscriptionService {
         subscription.setPrecio(subscriptionDTO.getPrecio());
         return subscriptionRepository.save(subscription);
     }
+
+    public void deleteSubscriptionById(Long id) {
+        if (!subscriptionRepository.existsById(id)) {
+            throw new NoSuchElementException("La suscripción con ID " + id + " no existe.");
+        }
+        subscriptionRepository.deleteById(id);
+    }
 }
 

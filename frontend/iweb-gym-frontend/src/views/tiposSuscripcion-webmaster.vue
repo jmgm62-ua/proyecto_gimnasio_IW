@@ -1,25 +1,29 @@
 <template>
-  <div class="subscription-types">
+  <div class="subscriptions-management">
     <h1>Gestión de Tipos de Suscripción</h1>
 
-    <form @submit.prevent="createSubscriptionType">
+    <!-- Formulario para añadir un nuevo tipo de suscripción -->
+    <form @submit.prevent="addSubscription">
       <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" v-model="newSubscription.nombre" required />
+        <label for="name">Nombre</label>
+        <input type="text" id="name" v-model="newSubscription.name" required />
       </div>
       <div class="form-group">
-        <label for="precio">Precio</label>
-        <input type="number" id="precio" v-model="newSubscription.precio" step="0.01" required />
+        <label for="price">Precio</label>
+        <input type="number" id="price" v-model="newSubscription.price" required />
       </div>
-      <button type="submit">Crear Tipo de Suscripción</button>
+      <button type="submit">Añadir Suscripción</button>
     </form>
 
-    <ol v-if="subscriptionTypes.length > 0">
-      <li v-for="type in subscriptionTypes" :key="type.id">
-        <p><strong>Nombre:</strong> {{ type.nombre }}</p>
-        <p><strong>Precio:</strong> {{ type.precio }} €</p>
+    <!-- Lista de tipos de suscripción -->
+    <h2>Tipos de Suscripción</h2>
+    <ul v-if="subscriptions.length > 0">
+      <li v-for="subscription in subscriptions" :key="subscription.id">
+        <p><strong>Nombre:</strong> {{ subscription.name }}</p>
+        <p><strong>Precio:</strong> {{ subscription.price }} €</p>
+        <button @click="deleteSubscription(subscription.id)">Eliminar</button>
       </li>
-    </ol>
+    </ul>
     <p v-else>No hay tipos de suscripción disponibles.</p>
   </div>
 </template>
@@ -30,17 +34,14 @@ import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: 'SubscriptionTypes',
+  name: 'SubscriptionsManagement',
   setup() {
-    const subscriptionTypes = ref([]);
-    const newSubscription = ref({
-      nombre: '',
-      precio: 0,
-    });
+    const subscriptions = ref([]);
+    const newSubscription = ref({ name: '', price: 0 });
     const userStore = useUserStore();
     const router = useRouter();
 
-    const fetchSubscriptionTypes = async () => {
+    const fetchSubscriptions = async () => {
       try {
         const response = await fetch('http://localhost:8080/subscriptions', {
           headers: {
@@ -48,17 +49,17 @@ export default defineComponent({
           },
         });
         if (response.ok) {
-          subscriptionTypes.value = await response.json();
+          subscriptions.value = await response.json();
         } else {
           throw new Error('Error al obtener los tipos de suscripción');
         }
       } catch (error) {
         console.error(error);
-        alert('No se pudo obtener los tipos de suscripción.');
+        alert('No se pudo obtener la lista de tipos de suscripción.');
       }
     };
 
-    const createSubscriptionType = async () => {
+    const addSubscription = async () => {
       try {
         const response = await fetch('http://localhost:8080/subscriptions', {
           method: 'POST',
@@ -68,57 +69,77 @@ export default defineComponent({
           },
           body: JSON.stringify(newSubscription.value),
         });
+
         if (response.ok) {
-          alert('Tipo de suscripción creado con éxito.');
-          fetchSubscriptionTypes(); // Actualizar la lista
-          newSubscription.value = { nombre: '', precio: 0 }; // Resetear el formulario
+          alert('Tipo de suscripción añadido con éxito');
+          newSubscription.value = { name: '', price: 0 };
+          fetchSubscriptions();
         } else {
-          throw new Error('Error al crear el tipo de suscripción');
+          throw new Error('Error al añadir el tipo de suscripción');
         }
       } catch (error) {
         console.error(error);
-        alert('Hubo un error al crear el tipo de suscripción.');
+        alert('Hubo un error al añadir el tipo de suscripción.');
+      }
+    };
+
+    const deleteSubscription = async (id) => {
+      try {
+        const response = await fetch(`http://localhost:8080/subscriptions/${id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        if (response.ok) {
+          alert('Tipo de suscripción eliminado con éxito');
+          fetchSubscriptions();
+        } else {
+          throw new Error('Error al eliminar el tipo de suscripción');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Hubo un error al eliminar el tipo de suscripción.');
       }
     };
 
     onMounted(() => {
       if (userStore.userType !== 'LOGIN_OK_WEBMASTER') {
         alert('No tienes permisos para acceder a esta página.');
-        router.push('/'); // Redirigir a la página de inicio
+        router.push('/');
       } else {
-        fetchSubscriptionTypes();
+        fetchSubscriptions();
       }
     });
 
     return {
-      subscriptionTypes,
+      subscriptions,
       newSubscription,
-      createSubscriptionType,
+      addSubscription,
+      deleteSubscription,
     };
   },
 });
 </script>
 
 <style scoped>
-.subscription-types {
+.subscriptions-management {
   max-width: 800px;
   margin: 0 auto;
   text-align: left;
 }
-form {
-  margin-bottom: 2rem;
-}
 .form-group {
   margin-bottom: 1rem;
 }
-form label {
+label {
   display: block;
   font-weight: bold;
+  margin-bottom: 0.5rem;
 }
-form input {
+input {
   width: 100%;
   padding: 0.5rem;
-  margin-top: 0.5rem;
   margin-bottom: 1rem;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -131,9 +152,16 @@ button {
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
+  margin-right: 0.5rem;
 }
 button:hover {
   background-color: #45a049;
+}
+button:last-child {
+  background-color: #f44336;
+}
+button:last-child:hover {
+  background-color: #e53935;
 }
 ul {
   list-style-type: none;
