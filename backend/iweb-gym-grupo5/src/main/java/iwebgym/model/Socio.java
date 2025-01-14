@@ -3,6 +3,7 @@ package iwebgym.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "socios")
+@ToString(exclude = {"reservas", "reservaInstalacions"})
 public class Socio extends User {
 
     private String tipoCuota;

@@ -126,14 +126,13 @@ export default {
           });
 
           const iniciarReserva = confirm(
-            `Has hecho clic en el evento "${actividad.nombre}" que ocurre el ${fechaEvento}. 
+            `Actividad "${actividad.nombre}" en la fecha ${fechaEvento}. 
             ¿Deseas iniciar la reserva?`
           );
 
           if (iniciarReserva) {
             useUserStore().setActividadAReservar(actividad);
             useUserStore().setFechaSeleccionada(fechaEvento)
-            alert(fechaEvento)
             router.push("/ver-detalles");
           } else {
             console.log("Reserva cancelada.");

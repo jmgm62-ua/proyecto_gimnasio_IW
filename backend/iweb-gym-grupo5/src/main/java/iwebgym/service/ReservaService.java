@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -71,12 +74,20 @@ public class ReservaService {
         ingreso_nuevo.setCantidad(new BigDecimal(price));
         ingreso_nuevo.setReferencia("Cobro_actividad_" + actividad.getId() + "_" + socio.getEmail() + "_" + reservaRequest.getFechaSeleccionada());
         String fechaString = reservaRequest.getFechaSeleccionada();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaSeleccionada = dateFormat.parse(fechaString);
-        ingreso_nuevo.setFecha(fechaSeleccionada);
+        String horaString = reservaRequest.getHoraInicio();
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        LocalDate fechaLocal = LocalDate.parse(fechaString, dateFormatter);
+        LocalTime horaLocal = LocalTime.parse(horaString, timeFormatter);
+        LocalDateTime fechaHoraSeleccionada = LocalDateTime.of(fechaLocal, horaLocal);
+
+        ingreso_nuevo.setFecha(java.sql.Timestamp.valueOf(LocalDateTime.now()));
         ingresoService.saveIngreso(ingreso_nuevo);
 
-        Reserva reserva = new Reserva(fechaSeleccionada, actividad, socio);
+        Date fechaReserva = Date.from(fechaHoraSeleccionada.atZone(ZoneId.systemDefault()).toInstant());
+        Reserva reserva = new Reserva(fechaReserva, actividad, socio);
 
 
         return reservaRepository.save(reserva);
