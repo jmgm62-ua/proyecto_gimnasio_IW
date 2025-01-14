@@ -144,7 +144,7 @@ export default {
           
           // Hacer la solicitud a Green-Sys
           const response = await axios.post(
-            "https://sandbox.green-sys.es/sales",
+            "https://api.green-sys.es/sales",
             {
               amount: this.saldoToAdd,
               currency: "EUR",
