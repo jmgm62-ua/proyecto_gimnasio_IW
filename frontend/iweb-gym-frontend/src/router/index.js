@@ -45,6 +45,25 @@ const router = createRouter({
       component: () => import('../views/MiPerfil-webmaster.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/webmaster-subscriptions',
+      name: 'webmaster-subscription',
+      component: () => import('../views/tiposSuscripcion-webmaster.vue'),
+      meta: { requiresAuth: true}
+    },
+    {
+      path: '/actividad-nueva',
+      name: 'actividad-nueva',
+      component: () => import('../views/formActividad.vue'),
+      meta: { requiresAuth: true}
+    },
+    {
+      path: '/solicitudes-pendientes',
+      name: 'solicitudes-pendientes',
+      component: () => import('../views/formActividad.vue'),
+      meta: { requiresAuth: true}
+    },
+
     
     
   ],

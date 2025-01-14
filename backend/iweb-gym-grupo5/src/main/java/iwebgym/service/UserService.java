@@ -149,4 +149,23 @@ public class UserService {
         userRepository.save(usuario);
     }
 
+    // Usuarios inactivos sin fecha de alta
+    public List<Usuario> getNewMemberRequests() {
+        return userRepository.findByFechaAltaIsNullAndActivoFalse();
+    }
+
+    // Se aprueba un nueov usuario, se cambia el flag a activo y se establece fecha de alta
+    public void approveUser(Long id) {
+        Usuario usuario = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        usuario.setActivo(true);
+        usuario.setFechaAlta(LocalDate.now());
+        userRepository.save(usuario);
+    }
+
+    // Se elimina un usuario rechazado por el webmaster
+    public void rejectUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
 }

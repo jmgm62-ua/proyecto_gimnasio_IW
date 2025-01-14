@@ -94,4 +94,25 @@ public class UserController {
         userService.activateUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Soocios nuevos pendientes de aprobacion
+    @GetMapping("/nuevos")
+    public ResponseEntity<List<Usuario>> getNewMemberRequests() {
+        List<Usuario> nuevosSocios = userService.getNewMemberRequests();
+        return ResponseEntity.ok(nuevosSocios);
+    }
+
+    // Se aprueba un socio nuevo por el webmaster
+    @PutMapping("/{id}/aprobar")
+    public ResponseEntity<Void> approveUser(@PathVariable Long id) {
+        userService.approveUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // Se elimina un usuario nuevo que el webmaster ha rechazado
+    @DeleteMapping("/{id}/rechazar")
+    public ResponseEntity<Void> rejectUser(@PathVariable Long id) {
+        userService.rejectUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }

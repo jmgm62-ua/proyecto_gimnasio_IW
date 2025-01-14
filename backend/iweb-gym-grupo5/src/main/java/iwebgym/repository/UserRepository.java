@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM Usuario u WHERE u.activo = false")
     List<Usuario> findInactiveUsers();
+
+    List<Usuario> findByFechaAltaIsNullAndActivoFalse();
 }
