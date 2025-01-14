@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/actividad")
 public class ActividadController {
 
     private final ActividadService actividadService;
@@ -40,5 +40,18 @@ public class ActividadController {
     public ResponseEntity<String> addActividad(@RequestBody ActividadDTO actividadDTO) {
         actividadService.addActividad(actividadDTO);
         return ResponseEntity.ok("Actividad añadida con éxito");
+    }
+
+    // Endpoint para obtener los asistentes a una actividad específica
+    @GetMapping("/{id}/asistentes")
+    public ResponseEntity<List<UsuarioDTO>> getAsistentesPorActividad(@PathVariable Long id) {
+        try {
+            List<UsuarioDTO> asistentes = actividadService.obtenerAsistentesPorActividad(id);
+            return ResponseEntity.ok(asistentes);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

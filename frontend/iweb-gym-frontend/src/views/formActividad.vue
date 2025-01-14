@@ -87,17 +87,17 @@ export default defineComponent({
     const monitores = ref([]);
 
     const fetchTiposActividad = async () => {
-      const response = await fetch('http://localhost:8080/api/get-tipos-actividad');
+      const response = await fetch('http://localhost:8080/actividad/get-tipos-actividad');
       tiposActividad.value = await response.json();
     };
 
     const fetchMonitores = async () => {
-      const response = await fetch('http://localhost:8080/api/get-monitores');
+      const response = await fetch('http://localhost:8080/actividad/get-monitores');
       monitores.value = await response.json();
     };
 
     const submitForm = async () => {
-      const response = await fetch('http://localhost:8080/api/add-actividad', {
+      const response = await fetch('http://localhost:8080/actividad/add-actividad', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

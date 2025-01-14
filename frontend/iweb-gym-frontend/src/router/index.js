@@ -60,12 +60,18 @@ const router = createRouter({
     {
       path: '/solicitudes-pendientes',
       name: 'solicitudes-pendientes',
-      component: () => import('../views/formActividad.vue'),
+      component: () => import('../views/SolicitudesUsuario.vue'),
       meta: { requiresAuth: true}
     },
+    {
+      path: '/actividades/:id/asistentes',
+      name: 'AsistentesActividad',
+      component: () => import('../views/listaAsistentes.vue'),
+    },
 
-    
-    
+
+
+
   ],
 })
 

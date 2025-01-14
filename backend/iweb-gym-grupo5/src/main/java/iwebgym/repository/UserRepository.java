@@ -15,4 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<Usuario> findInactiveUsers();
 
     List<Usuario> findByFechaAltaIsNullAndActivoFalse();
+
+    // Consulta para obtener usuarios por ID de actividad
+    @Query("SELECT u FROM Usuario u JOIN u.actividades a WHERE a.id = :actividadId")
+    List<Usuario> findUsuariosPorActividadId(@Param("actividadId") Long actividadId);
 }
