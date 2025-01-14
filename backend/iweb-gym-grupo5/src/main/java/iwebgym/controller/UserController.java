@@ -146,4 +146,40 @@ public class UserController {
             return ResponseEntity.ok(actividades);
         }
     }
+
+    @GetMapping("/cargar_saldo/{referencia}/{saldo_a_cargar}/{email}")
+    public ResponseEntity<?> cargarSaldo(
+            @PathVariable String referencia,
+            @PathVariable float saldo_a_cargar,
+            @PathVariable String email
+    ) {
+        try {
+            userService.cargar_saldo(referencia, saldo_a_cargar, email);
+            return ResponseEntity.ok().body(
+                    "<html><body><h3>Saldo correctamente cargado.</h3>" +
+                            "<p>Pulsa <a href=\"http://localhost:5173/\">aquí</a> para volver a la página del gimnasio.</p></body></html>"
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    "<html><body><h3>Error al cargar el saldo:</h3>" +
+                            "<p>" + e.getMessage() + "</p>" +
+                            "<p>Por favor, intenta nuevamente o contacta con soporte.</p></body></html>"
+            );
+        }
+    }
+
+
+    @GetMapping("/registrar_referencia/{referencia}")
+    public ResponseEntity<?> registrar_referencia(
+            @PathVariable String referencia
+    ) {
+        try {
+            userService.registrarNuevaReferencia(referencia);
+        }catch (Exception e){
+            return ResponseEntity.ok("Referencia ya existente, no se registra");
+        }
+
+        return ResponseEntity.ok("Referencia registrada");
+    }
+
 }

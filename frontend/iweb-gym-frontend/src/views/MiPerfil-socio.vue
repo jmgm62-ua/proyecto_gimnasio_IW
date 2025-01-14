@@ -43,16 +43,37 @@
                 <div class="col-md-4"><strong>Saldo:</strong></div>
                 <div class="col-md-8">{{ userData.saldo | currency }}</div>
               </div>
-              <div class="text-center mt-4">
+
+              <!-- Cargar Saldo Form -->
+              <div v-if="showSaldoForm" class="mt-4">
+                <h5>Cargar Saldo</h5>
+                <form @submit.prevent="handleSaldoSubmit">
+                  <div class="form-group">
+                    <label for="saldo">Saldo a cargar en €</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="saldo"
+                      v-model="saldoToAdd"
+                      required
+                      min="1"
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-3">Confirmar Carga</button>
+                </form>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="text-center mt-4" v-if="!showSaldoForm">
                 <router-link to="/mis-reservas" class="btn btn-primary">
                   Mis Reservas
                 </router-link>
               </div>
 
               <div class="text-center mt-4">
-                <router-link to="/mis-reservas" class="btn btn-primary">
+                <button @click="toggleSaldoForm" class="btn btn-primary">
                   Cargar Saldo
-                </router-link>
+                </button>
               </div>
 
               <div class="text-center mt-4">
@@ -71,12 +92,15 @@
 <script>
 import { useUserStore } from '@/stores/userStore';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
   data() {
     return {
       userData: {},
       loading: true,
+      saldoToAdd: 0,  // Amount to be added to the balance
+      showSaldoForm: false,  // Flag to show/hide the form
     };
   },
   computed: {
@@ -94,9 +118,8 @@ export default {
         const response = await axios.get(`http://localhost:8080/users/find_socio/${this.email}`);
         this.userData = response.data;
         const userStore = useUserStore();
-        userStore.tipo_suscripcion = this.userData.tipoCuota
-        userStore.direccion = this.userData.direccion
-        
+        userStore.tipo_suscripcion = this.userData.tipoCuota;
+        userStore.direccion = this.userData.direccion;
       } catch (error) {
         console.error('Error al obtener los datos del socio:', error);
         this.userData = null;
@@ -104,12 +127,60 @@ export default {
         this.loading = false;
       }
     },
+
+    toggleSaldoForm() {
+      this.showSaldoForm = !this.showSaldoForm;
+    },
+
+    async handleSaldoSubmit() {
+      if (this.saldoToAdd > 0) {
+        try {
+          const now = new Date().toLocaleString("es-ES", { timeZone: "Europe/Madrid" });
+          const fechaHoraReferencia = now.replace(/[^\d]/g, "");
+          const nombreReferencia = `${fechaHoraReferencia}_${this.saldoToAdd}_${this.email}`;
+          
+          // Registrar referencia
+          await axios.get(`http://localhost:8080/users/registrar_referencia/${nombreReferencia}`);
+          
+          // Hacer la solicitud a Green-Sys
+          const response = await axios.post(
+            "https://sandbox.green-sys.es/sales",
+            {
+              amount: this.saldoToAdd,
+              currency: "EUR",
+              description: "Carga de saldo",
+              reference: nombreReferencia,
+              url_callback: `http://localhost:8080/users/cargar_saldo/${nombreReferencia}/${this.saldoToAdd}/${this.email}`,
+            },
+            {
+              headers: {
+                "x-api-key": "sk_4y59mqxk26m5wokhcm",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          
+          // Redirigir al usuario a la URL de pago proporcionada por Green-Sys
+          window.location.href = response.data.url;  // Redirige al TPV
+
+        } catch (error) {
+          console.error("Error al cargar el saldo:", error);
+        }
+      }
+    },
+
+
   },
   mounted() {
     this.fetchUserData();
   },
+  setup() {
+    const router = useRouter(); // Inicializa el router aquí y lo haces accesible
+    return { router };
+  },
 };
 </script>
+
 
 <style scoped>
 .card {
