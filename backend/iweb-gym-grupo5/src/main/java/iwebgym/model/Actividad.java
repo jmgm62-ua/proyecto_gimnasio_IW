@@ -45,6 +45,10 @@ public class Actividad {
     @JoinColumn(name = "monitor_id")
     private Monitor monitor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instalacion_id")
+    private Instalacion instalacion;
+
     public Actividad() {
     }
 

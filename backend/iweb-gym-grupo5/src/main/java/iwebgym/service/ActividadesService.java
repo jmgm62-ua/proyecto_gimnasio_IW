@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,11 @@ public class ActividadesService {
     @Autowired
     private TipoActividadService tipoActividadService;
 
+    @Autowired
+    private InstalacionRepository instalacionRepository;
+
+    @Autowired
+    private TipoActividadRepository tipoActividadRepository;
 
     @Transactional(readOnly = true)
     public ArrayList<ActividadData> findAllActividades() {
@@ -91,6 +97,63 @@ public class ActividadesService {
         actividadData.precio_extra_actividad =tuple.getPrice();
 
         return actividadData;
+    }
+
+
+    @Transactional
+    public ActividadData crearActividad(ActividadData actividadData) {
+        // Validar que la instalación existe
+        Optional<Instalacion> instalacion = instalacionRepository.findById(actividadData.getInstalacionId());
+        if (!instalacion.isPresent()) {
+            throw new RuntimeException("La instalación seleccionada no existe");
+        }
+
+        // Validar que no haya conflicto de horarios
+        if (existeConflictoHorario(actividadData)) {
+            throw new RuntimeException("Ya existe una actividad en esa instalación para el horario seleccionado");
+        }
+
+        // Validar que el monitor existe
+        Optional<Monitor> monitor = monitorRepository.findById(actividadData.getMonitorId());
+        if (!monitor.isPresent()) {
+            throw new RuntimeException("El monitor seleccionado no existe");
+        }
+
+        // Crear la actividad
+        Actividad actividad = modelMapper.map(actividadData, Actividad.class);
+        actividad.setMonitor(monitor.get());
+        actividad.setInstalacion(instalacion.get());
+
+        // Establecer el tipo de actividad
+        Optional<TipoActividad> tipoActividad = tipoActividadRepository.findById(actividadData.getTipoActividadId());
+        if (!tipoActividad.isPresent()) {
+            throw new RuntimeException("El tipo de actividad seleccionado no existe");
+        }
+        actividad.setTipoActividad(tipoActividad.get());
+
+        Actividad savedActividad = actividadRepository.save(actividad);
+        return modelMapper.map(savedActividad, ActividadData.class);
+    }
+
+    private boolean existeConflictoHorario(ActividadData nuevaActividad) {
+        List<Actividad> actividadesExistentes = actividadRepository
+                .findByInstalacionIdAndDiaSemana(
+                        nuevaActividad.getInstalacionId(),
+                        nuevaActividad.getDiaSemana()
+                );
+
+        LocalTime nuevoInicio = LocalTime.parse(nuevaActividad.getHoraInicio());
+        LocalTime nuevoFin = LocalTime.parse(nuevaActividad.getHoraFin());
+
+        return actividadesExistentes.stream().anyMatch(actividad -> {
+            LocalTime existenteInicio = LocalTime.parse(actividad.getHoraInicio());
+            LocalTime existenteFin = LocalTime.parse(actividad.getHoraFin());
+
+            return (nuevoInicio.isBefore(existenteFin) && nuevoInicio.isAfter(existenteInicio)) ||
+                    (nuevoFin.isAfter(existenteInicio) && nuevoFin.isBefore(existenteFin)) ||
+                    (nuevoInicio.isBefore(existenteInicio) && nuevoFin.isAfter(existenteFin)) ||
+                    (nuevoInicio.equals(existenteInicio) || nuevoFin.equals(existenteFin));
+        });
     }
 
 }

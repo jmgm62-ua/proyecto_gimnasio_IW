@@ -2,6 +2,7 @@ package iwebgym.service;
 
 import iwebgym.dto.ActividadData;
 import iwebgym.dto.StringIntTuple;
+import iwebgym.dto.TipoActividadDTO;
 import iwebgym.model.Actividad;
 import iwebgym.model.TipoActividad;
 import iwebgym.repository.ActividadRepository;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TipoActividadService {
@@ -49,6 +51,14 @@ public class TipoActividadService {
         return new StringIntTuple(nombre_tipo, precio);
     }
 
+
+    @Transactional(readOnly = true)
+    public List<TipoActividadDTO> findAllTiposActividad() {
+        return tipoActividadRepository.findAll()
+                .stream()
+                .map(tipo -> modelMapper.map(tipo, TipoActividadDTO.class))
+                .collect(Collectors.toList());
+    }
 
 
 
