@@ -172,10 +172,10 @@ export default {
         monitorId: ''
       },
       tiposActividad: [
-        { id: 0, nombre: 'Spinning' },
-        { id: 1, nombre: 'Crossfit' },
-        { id: 2, nombre: 'Pilates' },
-        { id: 3, nombre: 'HIIT' }
+        { id: 1, nombre: 'Spinning' },
+        { id: 2, nombre: 'Crossfit' },
+        { id: 3, nombre: 'Pilates' },
+        { id: 4, nombre: 'HIIT' }
       ],
       instalaciones: [],
       monitores: [],
