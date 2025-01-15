@@ -141,14 +141,6 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    // Cambia el estado del usuario a activo
-    public void activateUser(Long id) {
-        User usuario =userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-        usuario.setActivo(true);
-        userRepository.save(usuario);
-    }
-
     // Usuarios inactivos sin fecha de alta
     public List<Usuario> getNewMemberRequests() {
         return userRepository.findByFechaAltaIsNullAndActivoFalse();
@@ -166,6 +158,22 @@ public class UserService {
     // Se elimina un usuario rechazado por el webmaster
     public void rejectUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public void deactivateUser(Long id) throws UserNotFoundException {
+        Socio user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con ID: " + id));
+        user.setActivo(false);
+        user.setFechaBaja(LocalDateTime.now().toString());
+        userRepository.save(user);
+    }
+
+    public void activateUser(Long id) throws UserNotFoundException {
+        Socio user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con ID: " + id));
+        user.setActivo(true);
+        user.setFechaBaja(null);
+        userRepository.save(user);
     }
 
 }

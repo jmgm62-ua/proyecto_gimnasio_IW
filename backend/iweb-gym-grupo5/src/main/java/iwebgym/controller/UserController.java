@@ -91,13 +91,6 @@ public class UserController {
         return ResponseEntity.ok(inactivos);
     }
 
-    // Activaar cuenta aprobada por el webmaster
-    @PutMapping("/{id}/activar")
-    public ResponseEntity<Void> activateUser(@PathVariable Long id) {
-        userService.activateUser(id);
-        return ResponseEntity.noContent().build();
-    }
-
     // Soocios nuevos pendientes de aprobacion
     @GetMapping("/nuevos")
     public ResponseEntity<List<Usuario>> getNewMemberRequests() {
@@ -129,7 +122,7 @@ public class UserController {
     // Desactiva un usuario
     @PutMapping("/{id}/desactivar")
     public ResponseEntity<String> deactivateMember(@PathVariable Long id) {
-        Optional<Socio> optionalSocio = socioRepository.findById(id);
+        Optional<SocioData> optionalSocio = socioRepository.findById(id);
         if (optionalSocio.isPresent()) {
             Socio socio = optionalSocio.get();
             socio.setActivo(false);
@@ -140,4 +133,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Socio no encontrado");
         }
     }
+
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<String> activateUser(@PathVariable Long id) {
+        try {
+            userService.activateUser(id);
+            return ResponseEntity.ok("Usuario activado con éxito.");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al activar el usuario.");
+        }
 }
