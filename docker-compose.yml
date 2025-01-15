@@ -2,7 +2,7 @@ version: '3.8'
 services:
   app:
     build:
-      context: .
+      context: ./backend/iweb-gym-grupo5
       dockerfile: Dockerfile
     container_name: springboot-app
     ports:
@@ -14,6 +14,18 @@ services:
       SPRING_DATASOURCE_USERNAME: iw
       SPRING_DATASOURCE_PASSWORD: iw
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - spring-postgres
+
+  frontend:
+    build:
+      context: ./frontend/iweb-gym-frontend
+      dockerfile: Dockerfile
+    container_name: vue-frontend
+    ports:
+      - "5173:5173"  # Map port 5173 to host
+    depends_on:
+      - app
     networks:
       - spring-postgres
 
