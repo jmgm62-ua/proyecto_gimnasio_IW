@@ -138,7 +138,7 @@ export default {
 }
 
 .btn {
-  background-color: #007bff;
+  background-color: #0f0f0f;
   color: white;
   padding: 0.5rem 1rem;
   border: none;
@@ -148,7 +148,7 @@ export default {
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: #141414;
 }
 
 .btn:disabled {
