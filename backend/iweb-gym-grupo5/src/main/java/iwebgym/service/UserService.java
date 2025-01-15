@@ -18,6 +18,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -240,7 +241,6 @@ public class UserService {
     }
 
 
-
     @Transactional
     public boolean registrarNuevaReferencia(String referencia) throws Exception {
 
@@ -257,5 +257,37 @@ public class UserService {
         ingresoPendienteRepository.save(ingresoPendiente);
 
         return true;
+    }
+
+
+    public List<SocioData> getPendientesDeActivacion() {
+        return socioRepository.findInactiveSociosWithoutFechaAlta()
+                .stream()
+                .map(socio -> new SocioData(
+                        socio.getId(),
+                        socio.getName(),
+                        socio.getEmail(),
+                        socio.getDireccion(),
+                        socio.getTelefono(),
+                        socio.getActivo()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void activarSocio(Long id) {
+        System.out.println("ID recibido: " + id);
+        Socio socio = socioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+        socio.setActivo(true);
+        socio.setFechaAlta(LocalDate.now().toString());
+        socioRepository.save(socio);
+    }
+
+    @Transactional
+    public void eliminarSocio(Long id) {
+        if (!socioRepository.existsById(id)) {
+            throw new RuntimeException("Socio no encontrado");
+        }
+        socioRepository.deleteById(id);
     }
 }

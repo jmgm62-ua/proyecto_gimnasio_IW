@@ -182,4 +182,23 @@ public class UserController {
         return ResponseEntity.ok("Referencia registrada");
     }
 
+
+    @GetMapping("/pendientes")
+    public ResponseEntity<List<SocioData>> getPendientesDeActivacion() {
+        List<SocioData> sociosPendientes = userService.getPendientesDeActivacion();
+        return ResponseEntity.ok(sociosPendientes);
+    }
+
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<Void> activarSocio(@PathVariable Long id) {
+        userService.activarSocio(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarSocio(@PathVariable Long id) {
+        userService.eliminarSocio(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

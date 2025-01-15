@@ -27,4 +27,8 @@ public interface SocioRepository extends JpaRepository<Socio, Long> {
     Long countNewSociosBetweenDates(@Param("fechaInicio") String fechaInicio, @Param("fechaFin") String fechaFin);
 
     List<Socio> findAll();
+
+    @Query("SELECT s FROM Socio s WHERE s.activo = false AND s.fechaAlta IS NULL")
+    List<Socio> findInactiveSociosWithoutFechaAlta();
+
 }
