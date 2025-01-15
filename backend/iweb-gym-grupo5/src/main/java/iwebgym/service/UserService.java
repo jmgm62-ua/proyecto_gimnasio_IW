@@ -50,6 +50,9 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SuscripcionRepository suscripcionRepository;
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -146,8 +149,11 @@ public class UserService {
     public boolean actualizarTipoCuota(String email, String nuevaCuota) {
         Optional<Socio> socioOpt = socioRepository.findByEmail(email);
         if (socioOpt.isPresent()) {
+            Long idInscripcion = suscripcionRepository.findIdByNombreSuscripcion(nuevaCuota);
+            Suscripcion suscripcion = suscripcionRepository.findById(idInscripcion).get();
             Socio socio = socioOpt.get();
             socio.setTipoCuota(nuevaCuota);
+            socio.setInscripcion(suscripcion);
             socioRepository.save(socio);
             return true;
         }
@@ -160,8 +166,12 @@ public class UserService {
             throw new RuntimeException("El email ya está registrado");
         }
 
+
+
         // Crear nuevo socio
-        Socio socio = new Socio(
+        Long idInscripcion = suscripcionRepository.findIdByNombreSuscripcion(request.getTipoCuota());
+
+                Socio socio = new Socio(
                 request.getName(),
                 request.getEmail(),
                 request.getPassword(),
@@ -174,6 +184,8 @@ public class UserService {
                 null, // fecha baja = null
                 0.0f  // saldo inicial = 0
         );
+
+                socio.setInscripcion(suscripcionRepository.findById(idInscripcion).get());
 
         return socioRepository.save(socio); // La secuencia generará el ID automáticamente
     }
