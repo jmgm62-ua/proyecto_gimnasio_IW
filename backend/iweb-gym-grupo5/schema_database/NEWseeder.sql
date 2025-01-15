@@ -16,8 +16,8 @@ DELETE FROM public.morosos;
 -- Reset sequences
 ALTER SEQUENCE public.user_id_seq RESTART WITH 1;
 
--- Eliminar la secuencia si ya existe (útil para entornos de desarrollo)
-DROP SEQUENCE IF EXISTS public.user_id_seq;
+-- Eliminar la secuencia si ya existe (usando CASCADE para eliminar dependencias)
+DROP SEQUENCE IF EXISTS public.user_id_seq CASCADE;
 
 -- Crear la secuencia para generar IDs únicos
 CREATE SEQUENCE public.user_id_seq START WITH 1 INCREMENT BY 1;
@@ -30,12 +30,6 @@ ALTER TABLE public.monitores ALTER COLUMN id SET DEFAULT nextval('public.user_id
 
 -- Configurar la tabla web_masters para usar la secuencia
 ALTER TABLE public.web_masters ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq');
-
--- Web Masters (Mantenido igual)
-INSERT INTO public.web_masters (id, activo, direccion, email, fecha_nacimiento, name, password, telefono)
-VALUES
-(16, true, 'Calle Admin 1', 'admin1@example.com', '1980-04-10', 'Admin Juan', 'adminpass1', '123123123'),
-(17, true, 'Avenida Admin 2', 'admin2@example.com', '1985-06-25', 'Admin Ana', 'adminpass2', '321321321');
 
 -- Suscripcion (Mantenido igual)
 INSERT INTO public.suscripcion (id, price, tipo_suscripcion) VALUES
@@ -60,74 +54,80 @@ INSERT INTO public.instalaciones (id, nombre) VALUES
 (7, 'Cafetería'),
 (8, 'Sala para estiramientos');
 
+-- Socios
+INSERT INTO public.socios (id, activo, direccion, email, fecha_nacimiento, name, password, telefono, saldo, fecha_alta, fecha_baja, tipo_cuota, inscripcion_id) VALUES
+(nextval('user_id_seq'), true, 'Calle Ficticia 123', 'socio1@example.com', '1995-05-10', 'Pedro López', 'password1', '123456789', 100.0, '2025-01-10', null, 'Individual', 1),
+(nextval('user_id_seq'), true, 'Avenida Imaginaria 456', 'socio2@example.com', '1988-08-20', 'María Fernández', 'password2', '987654321', 150.0, '2025-02-15', null, 'Familiar', 2),
+(nextval('user_id_seq'), true, 'Calle Real 789', 'socio3@example.com', '1992-12-25', 'José Rodríguez', 'password3', '555123456', 80.0, '2025-03-05', null, 'Individual', 1),
+(nextval('user_id_seq'), true, 'Calle Nueva 321', 'socio4@example.com', '1990-07-15', 'Luis García', 'password4', '666987654', 200.0, '2025-04-10', '2025-10-10', 'Familiar', 2),
+(nextval('user_id_seq'), true, 'Avenida Sol 654', 'socio5@example.com', '1989-01-30', 'Carmen Ruiz', 'password5', '777321987', 50.0, '2025-05-25', '2025-12-17', 'Individual', 1),
+(nextval('user_id_seq'), true, 'Calle Laurel 789', 'socio6@example.com', '1993-09-15', 'Elena Martínez', 'password6', '111222333', 125.0, '2025-06-01', null, 'Familiar', 2),
+(nextval('user_id_seq'), true, 'Avenida Pinos 234', 'socio7@example.com', '1987-03-28', 'Roberto Sánchez', 'password7', '444555666', 175.0, '2025-06-15', null, 'Individual', 1),
+(nextval('user_id_seq'), false, 'Plaza Mayor 567', 'socio8@example.com', '1991-11-03', 'Laura Torres', 'password8', '777888999', 90.0, '2025-07-01', '2025-12-31', 'Familiar', 2),
+(nextval('user_id_seq'), true, 'Calle Robles 890', 'socio9@example.com', '1994-06-22', 'Carlos Navarro', 'password9', '123987456', 220.0, '2025-07-15', null, 'Individual', 1),
+(nextval('user_id_seq'), true, 'Avenida Central 432', 'socio10@example.com', '1986-12-08', 'Isabel Moreno', 'password10', '456789123', 75.0, '2025-08-01', null, 'Familiar', 2),
+-- Socios sin fecha de alta
+(nextval('user_id_seq'), false, 'Calle Ficticia 123', 'socio11@example.com', null, 'Juan Perez', 'password11', '123456789', 100.0, null, null, 'Familiar', 2),
+(nextval('user_id_seq'), false, 'Avenida Imaginaria 456', 'socio12@example.com', null, 'María Fernández', 'password12', '987654321', 150.0, null, null, 'Familiar', 2),
+(nextval('user_id_seq'), false, 'Calle Real 789', 'socio13@example.com', null, 'José Rodríguez', 'password13', '555123456', 80.0, null, null, 'Individual', 1),
+(nextval('user_id_seq'), false, 'Calle Nueva 321', 'socio14@example.com', null, 'Luis García', 'password14', '666987654', 200.0, null, null, 'Familiar', 2);
+
 -- Monitores (Mantenido igual)
 INSERT INTO public.monitores (id, activo, direccion, email, fecha_nacimiento, name, password, telefono) VALUES
-(11, true, 'Calle Ficticia 123', 'monitor1@example.com', '1980-05-10', 'Juan Pérez', 'password1', '123456789'),
-(12, true, 'Avenida Imaginaria 456', 'monitor2@example.com', '1985-07-20', 'Ana García', 'password2', '987654321'),
-(13, false, 'Calle Real 789', 'monitor3@example.com', '1990-02-15', 'Carlos Sánchez', 'password3', '555123456'),
-(14, true, 'Calle Nueva 321', 'monitor4@example.com', '1975-11-30', 'Laura Martínez', 'password4', '666987654'),
-(15, true, 'Avenida Sol 654', 'monitor5@example.com', '1992-04-25', 'Marta Ruiz', 'password5', '777321987');
+(nextval('user_id_seq'), true, 'Calle Ficticia 123', 'monitor1@example.com', '1980-05-10', 'Juan Pérez', 'password1', '123456789'),
+(nextval('user_id_seq'), true, 'Avenida Imaginaria 456', 'monitor2@example.com', '1985-07-20', 'Ana García', 'password2', '987654321'),
+(nextval('user_id_seq'), false, 'Calle Real 789', 'monitor3@example.com', '1990-02-15', 'Carlos Sánchez', 'password3', '555123456'),
+(nextval('user_id_seq'), true, 'Calle Nueva 321', 'monitor4@example.com', '1975-11-30', 'Laura Martínez', 'password4', '666987654'),
+(nextval('user_id_seq'), true, 'Avenida Sol 654', 'monitor5@example.com', '1992-04-25', 'Marta Ruiz', 'password5', '777321987');
+
+-- Web Masters (Mantenido igual)
+INSERT INTO public.web_masters (id, activo, direccion, email, fecha_nacimiento, name, password, telefono)
+VALUES
+(nextval('user_id_seq'), true, 'Calle Admin 1', 'admin1@example.com', '1980-04-10', 'Admin Juan', 'adminpass1', '123123123'),
+(nextval('user_id_seq'), true, 'Avenida Admin 2', 'admin2@example.com', '1985-06-25', 'Admin Ana', 'adminpass2', '321321321');
 
 -- Actividades
 INSERT INTO public.actividades (id, dia_semana, fecha_fin, fecha_inicio, hora_fin, hora_inicio, nombre, tipo_actividad_id, monitor_id) VALUES
-(1, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 11),
-(2, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 11),
-(3, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 12),
-(4, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 12),
-(5, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 11),
-(6, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Spinning', 1, 11),
-(7, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 11),
-(8, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 14),
+(1, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 15),
+(2, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 15),
+(3, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 16),
+(4, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 16),
+(5, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '19:00', 'Spinning', 1, 15),
+(6, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Spinning', 1, 15),
+(7, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 15),
+(8, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 17),
 (9, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 15),
-(10, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 12),
-(11, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 12),
-(12, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 14),
+(10, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 16),
+(11, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 17),
+(12, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 17),
 (13, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 15),
 (14, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 15),
-(15, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 11),
-(16, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 11),
-(17, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 11),
-(18, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 11),
-(19, 'Domingo', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 11),
-(20, 'Domingo', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 12),
-(21, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 14),
-(22, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 14),
+(15, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 16),
+(16, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 17),
+(17, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 16),
+(18, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 16),
+(19, 'Domingo', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '11:00', '10:00', 'Pilates', 3, 15),
+(20, 'Domingo', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '18:00', '17:00', 'Pilates', 3, 16),
+(21, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 15),
+(22, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 15),
 (23, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 15),
-(24, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 15),
-(25, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 12),
-(26, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 12),
-(27, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 14),
-(28, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 11),
-(29, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 11),
-(30, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 12),
-(31, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 14),
-(32, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 14),
+(24, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 16),
+(25, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 17),
+(26, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '20:00', '18:00', 'HIIT', 4, 18),
+(27, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 19),
+(28, 'Lunes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 17),
+(29, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 16),
+(30, 'Martes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 17),
+(31, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 17),
+(32, 'Miércoles', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 16),
 (33, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 15),
 (34, 'Jueves', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 15),
-(35, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 14),
-(36, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 12),
-(37, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 12),
-(38, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 11),
-(39, 'Domingo', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 14),
+(35, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 15),
+(36, 'Viernes', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 16),
+(37, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 16),
+(38, 'Sábado', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 16),
+(39, 'Domingo', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '10:30', '09:00', 'Crossfit', 2, 15),
 (40, 'Domingo', '2026-12-31 23:59:00', '2025-01-01 00:00:00', '21:00', '20:00', 'Crossfit', 2, 15);
-
--- Socios
-INSERT INTO public.socios (id, activo, direccion, email, fecha_nacimiento, name, password, telefono, saldo, fecha_alta, fecha_baja, tipo_cuota, inscripcion_id) VALUES
-(1, true, 'Calle Ficticia 123', 'socio1@example.com', '1995-05-10', 'Pedro López', 'password1', '123456789', 100.0, '2025-01-10', null, 'Individual', 1),
-(2, true, 'Avenida Imaginaria 456', 'socio2@example.com', '1988-08-20', 'María Fernández', 'password2', '987654321', 150.0, '2025-02-15', null, 'Familiar', 2),
-(3, true, 'Calle Real 789', 'socio3@example.com', '1992-12-25', 'José Rodríguez', 'password3', '555123456', 80.0, '2025-03-05', null, 'Individual', 1),
-(4, true, 'Calle Nueva 321', 'socio4@example.com', '1990-07-15', 'Luis García', 'password4', '666987654', 200.0, '2025-04-10', '2025-10-10', 'Familiar', 2),
-(5, true, 'Avenida Sol 654', 'socio5@example.com', '1989-01-30', 'Carmen Ruiz', 'password5', '777321987', 50.0, '2025-05-25', '2025-12-17', 'Individual', 1),
-(6, true, 'Calle Laurel 789', 'socio6@example.com', '1993-09-15', 'Elena Martínez', 'password6', '111222333', 125.0, '2025-06-01', null, 'Familiar', 2),
-(7, true, 'Avenida Pinos 234', 'socio7@example.com', '1987-03-28', 'Roberto Sánchez', 'password7', '444555666', 175.0, '2025-06-15', null, 'Individual', 1),
-(8, false, 'Plaza Mayor 567', 'socio8@example.com', '1991-11-03', 'Laura Torres', 'password8', '777888999', 90.0, '2025-07-01', '2025-12-31', 'Familiar', 2),
-(9, true, 'Calle Robles 890', 'socio9@example.com', '1994-06-22', 'Carlos Navarro', 'password9', '123987456', 220.0, '2025-07-15', null, 'Individual', 1),
-(10, true, 'Avenida Central 432', 'socio10@example.com', '1986-12-08', 'Isabel Moreno', 'password10', '456789123', 75.0, '2025-08-01', null, 'Familiar', 2),
--- Socios sin fecha de alta
-(11, false, 'Calle Ficticia 123', 'socio11@example.com', null, 'Juan Perez', 'password11', '123456789', 100.0, null, null, 'Familiar', 2),
-(12, false, 'Avenida Imaginaria 456', 'socio12@example.com', null, 'María Fernández', 'password12', '987654321', 150.0, null, null, 'Familiar', 2),
-(13, false, 'Calle Real 789', 'socio13@example.com', null, 'José Rodríguez', 'password13', '555123456', 80.0, null, null, 'Individual', 1),
-(14, false, 'Calle Nueva 321', 'socio14@example.com', null, 'Luis García', 'password14', '666987654', 200.0, null, null, 'Familiar', 2);
 
 -- Reservas
 INSERT INTO public.reservas (id, fecha, actividad_id, socio_id) VALUES
@@ -218,10 +218,10 @@ INSERT INTO public.reservas_instalacion (id, fecha, instalacion_id, socio_id) VA
 
 -- Webmaster Actividad (Mantenido igual)
 INSERT INTO public.webmaster_actividad (webmaster_id, actividad_id) VALUES
-(16, 1),
-(16, 2),
-(17, 3),
-(17, 4);
+(20, 1),
+(20, 2),
+(21, 3),
+(21, 4);
 
 -- NUEVAS TABLAS --
 
