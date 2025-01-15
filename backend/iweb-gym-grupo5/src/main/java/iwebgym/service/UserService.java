@@ -160,20 +160,28 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void deactivateUser(Long id) throws UserNotFoundException {
-        Socio user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con ID: " + id));
-        user.setActivo(false);
-        user.setFechaBaja(LocalDateTime.now().toString());
-        userRepository.save(user);
+    public boolean deactivateUser(Long id) {
+        Optional<Socio> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            Socio user = optionalUser.get();
+            user.setActivo(false);
+            user.setFechaBaja(LocalDateTime.now().toString());
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
-    public void activateUser(Long id) throws UserNotFoundException {
-        Socio user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con ID: " + id));
-        user.setActivo(true);
-        user.setFechaBaja(null);
-        userRepository.save(user);
+    public boolean activateUser(Long id) {
+        Optional<Socio> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            Socio user = optionalUser.get();
+            user.setActivo(true);
+            user.setFechaBaja(null);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
 }

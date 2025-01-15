@@ -119,29 +119,32 @@ public class UserController {
         return ResponseEntity.ok(activeMembers);
     }
 
-    // Desactiva un usuario
+
     @PutMapping("/{id}/desactivar")
-    public ResponseEntity<String> deactivateMember(@PathVariable Long id) {
-        Optional<SocioData> optionalSocio = socioRepository.findById(id);
-        if (optionalSocio.isPresent()) {
-            Socio socio = optionalSocio.get();
-            socio.setActivo(false);
-            socio.setFechaBaja(LocalDate.now().toString()); // Establecer la fecha de baja
-            socioRepository.save(socio);
-            return ResponseEntity.ok("Socio desactivado con éxito");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Socio no encontrado");
+    public ResponseEntity<String> deactivateUser(@PathVariable Long id) {
+        try {
+            boolean success = userService.deactivateUser(id);
+            if (success) {
+                return ResponseEntity.ok("Usuario desactivado con éxito.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con ID: " + id);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al desactivar el usuario.");
         }
     }
 
     @PutMapping("/{id}/activar")
     public ResponseEntity<String> activateUser(@PathVariable Long id) {
         try {
-            userService.activateUser(id);
-            return ResponseEntity.ok("Usuario activado con éxito.");
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            boolean success = userService.activateUser(id);
+            if (success) {
+                return ResponseEntity.ok("Usuario activado con éxito.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con ID: " + id);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al activar el usuario.");
         }
+    }
 }
