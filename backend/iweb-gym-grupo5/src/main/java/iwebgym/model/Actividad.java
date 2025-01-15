@@ -15,7 +15,6 @@ import java.util.Set;
 public class Actividad {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nombre;

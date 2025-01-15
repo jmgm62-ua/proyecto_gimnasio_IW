@@ -9,7 +9,6 @@ import java.util.List;
 public class Suscripcion {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String tipoSuscripcion;
