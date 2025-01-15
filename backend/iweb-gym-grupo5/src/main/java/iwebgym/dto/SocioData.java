@@ -40,6 +40,16 @@ public class SocioData {
 
     }
 
+    public SocioData(Long id, String name, String email, String direccion, String telefono, Boolean activo) {
+        this.id=id;
+        this.name = name;
+        this.email = email;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.activo = activo;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

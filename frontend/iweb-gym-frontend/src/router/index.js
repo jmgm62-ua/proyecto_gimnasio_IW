@@ -91,6 +91,12 @@ const router = createRouter({
       component: () => import('../views/ListadoUsuariosSinPagar.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/ver-nuevas-peticiones',
+      name: 'listado-peticiones',
+      component: () => import('../views/ListadoSolicitudesSocio.vue'),
+      meta: { requiresAuth: true }
+    },
     
   ],
 })
