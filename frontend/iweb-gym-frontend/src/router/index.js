@@ -85,6 +85,12 @@ const router = createRouter({
       name: "VerDetalles",
       component: () => import("@/views/ConfirmarReserva.vue"),
     },
+    {
+      path: '/ver-listado-morosos',
+      name: 'listado-morosos',
+      component: () => import('../views/ListadoUsuariosSinPagar.vue'),
+      meta: { requiresAuth: true }
+    },
     
   ],
 })

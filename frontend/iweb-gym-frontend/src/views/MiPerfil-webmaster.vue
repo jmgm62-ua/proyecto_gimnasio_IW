@@ -22,7 +22,7 @@
                   <div class="col-md-4"><strong>Email:</strong></div>
                   <div class="col-md-8">{{ userStore.email }}</div>
                 </div>
-            
+
                 <div class="row mb-3">
                   <div class="col-md-4"><strong>Direccion:</strong></div>
                   <div class="col-md-8">{{ userData.direccion }}</div>
@@ -44,13 +44,13 @@
                     Ver Nuevas Peticiones de Socios
                   </router-link>
                 </div>
-  
+
                 <div class="text-center mt-4">
                   <router-link to="/activar-desactivar-perfiles" class="btn btn-primary">
                     Activar y Descativar Perfiles
                   </router-link>
                 </div>
-  
+
                 <div class="text-center mt-4">
                   <router-link to="/add-actividad" class="btn btn-primary">
                     Añadir Nueva Actividad
@@ -62,6 +62,11 @@
                     Visualizar informes
                   </router-link>
                 </div>
+                <div class="text-center mt-4">
+                  <router-link to="/ver-listado-morosos" class="btn btn-primary">
+                    Ver Listado  de Usuarios sin Pagar
+                  </router-link>
+                </div>
               </div>
             </div>
           </div>
@@ -69,11 +74,11 @@
       </div>
     </div>
   </template>
-  
+
   <script>
   import { useUserStore } from '@/stores/userStore';
   import axios from 'axios';
-  
+
   export default {
     data() {
       return {
@@ -101,7 +106,7 @@
           userStore.activo = this.userData.activo
           userStore.telefono = this.userData.telefono
           userStore.fecha_nacimiento = this.userData.fechaNacimiento
-          
+
         } catch (error) {
           console.error('Error al obtener los datos del socio:', error);
           this.userData = null;
@@ -115,36 +120,36 @@
     },
   };
   </script>
-  
+
   <style scoped>
   .card {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   .card-header {
     background-color: #1d1d1d;
     color: white;
     text-align: center;
   }
-  
+
   .card-body {
     padding: 1.5rem;
   }
-  
+
   .row {
     margin-bottom: 1rem;
   }
-  
+
   .btn-primary{
     color: white;
     background-color: #1d1d1d;
     border: 2px solid #000000;
   }
-  
+
   strong {
     font-weight: 600;
   }
-  
+
   .currency {
     font-weight: bold;
   }
