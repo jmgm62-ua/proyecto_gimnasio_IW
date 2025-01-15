@@ -58,9 +58,9 @@ INSERT INTO public.instalaciones (id, nombre) VALUES
 INSERT INTO public.socios (id, activo, direccion, email, fecha_nacimiento, name, password, telefono, saldo, fecha_alta, fecha_baja, tipo_cuota, inscripcion_id) VALUES
 (nextval('user_id_seq'), true, 'Calle Ficticia 123', 'socio1@example.com', '1995-05-10', 'Pedro López', 'password1', '123456789', 100.0, '2025-01-10', null, 'Individual', 1),
 (nextval('user_id_seq'), true, 'Avenida Imaginaria 456', 'socio2@example.com', '1988-08-20', 'María Fernández', 'password2', '987654321', 150.0, '2025-02-15', null, 'Familiar', 2),
-(nextval('user_id_seq'), true, 'Calle Real 789', 'socio3@example.com', '1992-12-25', 'José Rodríguez', 'password3', '555123456', 80.0, '2025-03-05', null, 'Individual', 1),
-(nextval('user_id_seq'), true, 'Calle Nueva 321', 'socio4@example.com', '1990-07-15', 'Luis García', 'password4', '666987654', 200.0, '2025-04-10', '2025-10-10', 'Familiar', 2),
-(nextval('user_id_seq'), true, 'Avenida Sol 654', 'socio5@example.com', '1989-01-30', 'Carmen Ruiz', 'password5', '777321987', 50.0, '2025-05-25', '2025-12-17', 'Individual', 1),
+(nextval('user_id_seq'), false, 'Calle Real 789', 'socio3@example.com', '1992-12-25', 'José Rodríguez', 'password3', '555123456', 0.0, '2025-03-05', null, 'Individual', 1),
+(nextval('user_id_seq'), false, 'Calle Nueva 321', 'socio4@example.com', '1990-07-15', 'Luis García', 'password4', '666987654', 0.0, '2025-04-10', '2025-10-10', 'Familiar', 2),
+(nextval('user_id_seq'), false, 'Avenida Sol 654', 'socio5@example.com', '1989-01-30', 'Carmen Ruiz', 'password5', '777321987', 0.0, '2025-05-25', '2025-12-17', 'Individual', 1),
 (nextval('user_id_seq'), true, 'Calle Laurel 789', 'socio6@example.com', '1993-09-15', 'Elena Martínez', 'password6', '111222333', 125.0, '2025-06-01', null, 'Familiar', 2),
 (nextval('user_id_seq'), true, 'Avenida Pinos 234', 'socio7@example.com', '1987-03-28', 'Roberto Sánchez', 'password7', '444555666', 175.0, '2025-06-15', null, 'Individual', 1),
 (nextval('user_id_seq'), false, 'Plaza Mayor 567', 'socio8@example.com', '1991-11-03', 'Laura Torres', 'password8', '777888999', 90.0, '2025-07-01', '2025-12-31', 'Familiar', 2),

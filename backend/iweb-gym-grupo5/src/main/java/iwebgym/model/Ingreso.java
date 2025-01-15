@@ -9,7 +9,6 @@ import java.util.Date;
 @Table(name = "ingresos")
 public class Ingreso {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String referencia;
