@@ -59,6 +59,7 @@ export default defineComponent({
           }
         });
         users.value = response.data;
+        console.log(users.value)
       } catch (error) {
         console.error('Error al obtener la lista de morosos:', error);
         alert('No se pudo obtener la lista de morosos.');
