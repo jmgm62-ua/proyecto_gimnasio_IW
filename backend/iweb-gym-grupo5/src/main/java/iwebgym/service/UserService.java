@@ -269,10 +269,10 @@ public class UserService {
         ingresoPendiente.setReferencia(referencia);
 
         Long nextId = 1L; // Valor por defecto si no hay reservas
-        List<Ingreso> allIngresos = ingresoRepository.findAll();
+        List<IngresoPendiente> allIngresos = ingresoPendienteRepository.findAll();
         if (!allIngresos.isEmpty()) {
             Long maxId = allIngresos.stream()
-                    .mapToLong(Ingreso::getId)
+                    .mapToLong(IngresoPendiente::getId)
                     .max()
                     .orElse(0L);
             nextId = maxId + 1;
@@ -317,7 +317,6 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
         socio.setActivo(false);
         socio.setFechaBaja(LocalDate.now().toString());
-        socio.setFechaAlta(null);
         socioRepository.save(socio);
     }
 

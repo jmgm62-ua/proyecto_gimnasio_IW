@@ -9,7 +9,6 @@ import java.util.Date;
 @Table(name = "ingresos_pendientes")
 public class IngresoPendiente {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String referencia;

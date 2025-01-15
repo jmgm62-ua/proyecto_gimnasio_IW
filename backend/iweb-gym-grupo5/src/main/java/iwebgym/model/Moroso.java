@@ -8,7 +8,6 @@ import java.util.Date;
 @Table(name = "morosos")
 public class Moroso {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long id_socio;
