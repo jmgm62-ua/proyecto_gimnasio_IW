@@ -70,12 +70,14 @@ public class MorosoService {
     }
 
     @Transactional
-    public void desactivarSocioMoroso(Long socioId) {
+    public void activarSocioMoroso(Long socioId) {
         Optional<Socio> socioOpt = socioRepository.findById(socioId);
         if (socioOpt.isPresent()) {
+            Long idMoroso = morosoRepository.obtainIdFromIdSocio(socioId);
+            morosoRepository.deleteById(idMoroso);
             Socio socio = socioOpt.get();
-            socio.setActivo(false);
-            socio.setFechaBaja(LocalDate.now().toString());
+            socio.setActivo(true);
+            socio.setFechaAlta(LocalDate.now().toString());
             socioRepository.save(socio);
         } else {
             throw new RuntimeException("Socio no encontrado");

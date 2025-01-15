@@ -22,9 +22,9 @@ public class MorosoController {
         return ResponseEntity.ok(morosos);
     }
 
-    @PutMapping("/{socioId}/desactivar")
-    public ResponseEntity<Void> desactivarSocioMoroso(@PathVariable Long socioId) {
-        morosoService.desactivarSocioMoroso(socioId);
+    @PutMapping("/{socioId}/activar")
+    public ResponseEntity<Void> activarSocioMoroso(@PathVariable Long socioId) {
+        morosoService.activarSocioMoroso(socioId);
         return ResponseEntity.ok().build();
     }
 }

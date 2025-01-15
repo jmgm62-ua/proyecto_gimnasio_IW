@@ -6,8 +6,8 @@
         <span class="sr-only">Cargando...</span>
       </div>
     </div>
-    <ul v-else-if="activeUsers.length > 0" class="list-unstyled">
-      <li v-for="user in activeUsers" :key="user.id" class="card mb-3">
+    <ul v-else-if="users.length > 0" class="list-unstyled">
+      <li v-for="user in users" :key="user.id" class="card mb-3">
         <div class="card-body">
           <p><strong>ID:</strong> {{ user.socioId }}</p>
           <p><strong>Nombre:</strong> {{ user.name }}</p>
@@ -17,10 +17,10 @@
           <p><strong>Fecha de Nacimiento:</strong> {{ formatDate(user.fechaNacimiento) }}</p>
           <p><strong>Mensualidad No Pagada:</strong> {{ user.mensualidadNoPagada }}</p>
           <button
-              @click="desactivarUsuario(user.socioId)"
+              @click="activarUsuario(user.socioId)"
               class="btn btn-danger"
           >
-            Desactivar Usuario
+            Activar Usuario
           </button>
         </div>
       </li>
@@ -45,11 +45,6 @@ export default defineComponent({
     const router = useRouter();
     const loading = ref(true);
 
-    // Computed property para filtrar solo usuarios activos
-    const activeUsers = computed(() => {
-      return users.value.filter(user => user.activo);
-    });
-
     const fetchMorosos = async () => {
       loading.value = true;
       try {
@@ -68,10 +63,10 @@ export default defineComponent({
       }
     };
 
-    const desactivarUsuario = async (socioId) => {
+    const activarUsuario = async (socioId) => {
       try {
         const response = await axios.put(
-            `http://localhost:8080/api/morosos/${socioId}/desactivar`,
+            `http://localhost:8080/api/morosos/${socioId}/activar`,
             {},
             {
               headers: {
@@ -83,11 +78,11 @@ export default defineComponent({
         if (response.status === 200) {
           // Actualizar la lista local filtrando el usuario desactivado
           users.value = users.value.filter(user => user.socioId !== socioId);
-          alert('Usuario desactivado con éxito');
+          alert('Usuario activado con éxito');
         }
       } catch (error) {
-        console.error('Error al desactivar el usuario:', error);
-        alert('Hubo un error al desactivar el usuario');
+        console.error('Error al activar el usuario:', error);
+        alert('Hubo un error al activar el usuario');
       }
     };
 
@@ -106,9 +101,9 @@ export default defineComponent({
     });
 
     return {
-      activeUsers,
+      users,
       loading,
-      desactivarUsuario,
+      activarUsuario,
       formatDate
     };
   }
@@ -134,7 +129,7 @@ export default defineComponent({
 
 .btn-danger {
   width: 100%;
-  background-color: #dc3545;
+  background-color: #03450b;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -145,7 +140,7 @@ export default defineComponent({
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  background-color: #03450b;
 }
 
 p {
