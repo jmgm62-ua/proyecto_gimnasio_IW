@@ -104,6 +104,13 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
 
+    {
+      path: '/crear-actividad',
+      name: 'crear-actividad',
+      component: () => import('../views/FormularioActividad.vue'),
+      meta: { requiresAuth: true }
+    },
+
 
   ],
 })

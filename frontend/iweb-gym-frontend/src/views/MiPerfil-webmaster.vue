@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="text-center mt-4">
-                  <router-link to="/add-actividad" class="btn btn-primary">
+                  <router-link to="/crear-actividad" class="btn btn-primary">
                     Añadir Nueva Actividad
                   </router-link>
                 </div>
