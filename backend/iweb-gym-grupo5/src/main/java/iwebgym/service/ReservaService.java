@@ -70,6 +70,18 @@ public class ReservaService {
         socio.setSaldo(saldo_socio.floatValue());
         socioRepository.save(socio);
 
+        //Comprobar cual es el ultimo id de reserva
+        Long nextId = 1L; // Valor por defecto si no hay socios
+        List<Reserva> allReservas = reservaRepository.findAll();
+        if (!allReservas.isEmpty()) {
+            Long maxId = allReservas.stream()
+                    .mapToLong(Reserva::getId)
+                    .max()
+                    .orElse(0L);
+            nextId = maxId + 1;
+        }
+
+
         String fechaString = reservaRequest.getFechaSeleccionada();
         String horaString = reservaRequest.getHoraInicio();
 
@@ -84,7 +96,7 @@ public class ReservaService {
         Date fechaReserva = Date.from(fechaHoraSeleccionada.atZone(ZoneId.systemDefault()).toInstant());
         Reserva reserva = new Reserva(fechaReserva, actividad, socio);
 
-
+        reserva.setId(nextId);
         return reservaRepository.save(reserva);
     }
 

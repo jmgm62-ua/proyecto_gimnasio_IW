@@ -47,4 +47,8 @@ public class Reserva {
         this.socio = null;
         socio.getReservas().remove(this);
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
