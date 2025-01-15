@@ -108,6 +108,12 @@ const router = createRouter({
       component: () => import('../views/FormularioActividad.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/cuotas-mensuales',
+      name: 'cuotas-mensuales',
+      component: () => import('../views/CuotasMensuales.vue'),
+      meta: { requiresAuth: true }
+    }
 
 
   ],

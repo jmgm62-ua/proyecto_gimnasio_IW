@@ -67,6 +67,11 @@
                     Ver Listado  de Usuarios sin Pagar
                   </router-link>
                 </div>
+                <div class="text-center mt-4">
+                  <router-link to="/cuotas-mensuales" class="btn btn-primary">
+                    Gestionar cuotas mensuales
+                  </router-link>
+                </div>
               </div>
             </div>
           </div>
