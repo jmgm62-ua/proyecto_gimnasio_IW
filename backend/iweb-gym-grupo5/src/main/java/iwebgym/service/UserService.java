@@ -159,16 +159,6 @@ public class UserService {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("El email ya está registrado");
         }
-        // Obtener el ID más alto actual
-        Long nextId = 1L; // Valor por defecto si no hay socios
-        List<Socio> allSocios = socioRepository.findAll();
-        if (!allSocios.isEmpty()) {
-            Long maxId = allSocios.stream()
-                    .mapToLong(Socio::getId)
-                    .max()
-                    .orElse(0L);
-            nextId = maxId + 1;
-        }
 
         // Crear nuevo socio
         Socio socio = new Socio(
@@ -185,9 +175,7 @@ public class UserService {
                 0.0f  // saldo inicial = 0
         );
 
-        socio.setId(nextId);
-
-        return socioRepository.save(socio);
+        return socioRepository.save(socio); // La secuencia generará el ID automáticamente
     }
 
 
