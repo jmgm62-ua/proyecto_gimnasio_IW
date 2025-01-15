@@ -32,4 +32,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     );
 
     List<Reserva> findByFechaBetween(Date fechaInicio, Date fechaFin);
+
+    List<Reserva> findByActividadIdAndFechaBetween(Long actividadId, Date startDate, Date endDate);
 }
