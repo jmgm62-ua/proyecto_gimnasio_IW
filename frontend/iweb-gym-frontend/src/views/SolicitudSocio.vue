@@ -4,10 +4,10 @@
       <div class="col-md-8 offset-md-2">
         <div class="card">
           <div class="card-header">
-            <h3>Solicitu de Nuevo Socio</h3>
+            <h3>Solicitud de Nuevo Socio</h3>
           </div>
           <div class="card-body">
-            <form @submit.prevent="registrarSocio" class="needs-validation">
+            <form @submit.prevent="registrarSocio" class="needs-validation" novalidate>
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="nombre" class="form-label">Nombre completo *</label>
@@ -27,8 +27,12 @@
                       class="form-control"
                       id="email"
                       v-model="formData.email"
+                      :pattern="emailPattern"
                       required
                   >
+                  <div v-if="formErrors.email" class="invalid-feedback">
+                    Email no válido.
+                  </div>
                 </div>
               </div>
 
@@ -51,8 +55,12 @@
                       class="form-control"
                       id="fechaNacimiento"
                       v-model="formData.fechaNacimiento"
+                      :max="fechaMaxima"
                       required
                   >
+                  <div v-if="formErrors.fechaNacimiento" class="invalid-feedback">
+                    La fecha de nacimiento no puede ser en el futuro.
+                  </div>
                 </div>
               </div>
 
@@ -64,8 +72,12 @@
                       class="form-control"
                       id="telefono"
                       v-model="formData.telefono"
+                      :pattern="telefonoPattern"
                       required
                   >
+                  <div v-if="formErrors.telefono" class="invalid-feedback">
+                    El teléfono no es válido.
+                  </div>
                 </div>
 
                 <div class="col-md-6 mb-3">
@@ -100,7 +112,7 @@
               </div>
 
               <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" :disabled="!formIsValid">
                   Registrar Solicitud
                 </button>
               </div>
@@ -127,11 +139,36 @@ export default {
         direccion: '',
         tipoCuota: 'Individual',
       },
-      mensaje: null
+      mensaje: null,
+      formErrors: {
+        email: false,
+        fechaNacimiento: false,
+        telefono: false,
+      },
+      emailPattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      telefonoPattern: /^[0-9]{9}$/,
     };
+  },
+  computed: {
+    fechaMaxima() {
+      return new Date().toISOString().split('T')[0];
+    },
+    formIsValid() {
+      return this.formData.name && this.formData.email && this.formData.password && this.formData.fechaNacimiento && this.formData.telefono && this.formData.direccion;
+    }
   },
   methods: {
     async registrarSocio() {
+      this.formErrors = {
+        email: !this.emailPattern.test(this.formData.email),
+        fechaNacimiento: new Date(this.formData.fechaNacimiento) > new Date(),
+        telefono: !this.telefonoPattern.test(this.formData.telefono),
+      };
+
+      if (this.formErrors.email || this.formErrors.fechaNacimiento || this.formErrors.telefono) {
+        return;
+      }
+
       try {
         const fechaActual = new Date().toISOString().split('T')[0];
 
@@ -142,7 +179,6 @@ export default {
           fechaBaja: null,
           saldo: 0
         };
-        console.log(socioData);
 
         const response = await axios.post('http://localhost:8080/users/registro-socio', socioData);
 
@@ -192,5 +228,11 @@ export default {
 
 .form-label {
   font-weight: 500;
+}
+
+.invalid-feedback {
+  display: block;
+  font-size: 0.875em;
+  color: #dc3545;
 }
 </style>
