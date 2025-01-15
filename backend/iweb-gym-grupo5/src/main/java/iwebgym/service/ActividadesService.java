@@ -55,7 +55,9 @@ public class ActividadesService {
                                 actividad.getHoraInicio(),
                                 actividad.getHoraFin(),
                                 actividad.getFechaInicio(),
-                                actividad.getFechaFin()
+                                actividad.getFechaFin(),
+                                actividad.getTipoActividad().getNombre(),
+                                actividad.getTipoActividad().getPrecioExtra()
                         ))
                         .collect(Collectors.toCollection(ArrayList::new)))
                 .orElse(null);

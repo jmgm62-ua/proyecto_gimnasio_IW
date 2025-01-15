@@ -117,18 +117,20 @@ INSERT INTO public.socios (id, activo, direccion, email, fecha_nacimiento, name,
 -- Reservas
 INSERT INTO public.reservas (id, fecha, actividad_id, socio_id) VALUES
 -- Spinning reservations
-(1, '2025-01-17 18:45:00', 2, 1),    -- Tuesday Spinning for Pedro
-(2, '2025-01-18 18:50:00', 3, 3),    -- Wednesday Spinning for José
-(3, '2025-01-21 09:45:00', 6, 7),    -- Saturday Spinning for Roberto
+(1, '2025-01-03 19:00:00', 2, 1),    -- Tuesday Spinning for Pedro
+(2, '2025-01-04 10:00:00', 3, 3),    -- Wednesday Spinning for José
+(3, '2025-01-04 10:00:00', 6, 7),    -- Saturday Spinning for Roberto
+(31, '2025-01-04 10:00:00', 6, 8),   -- Saturday Spinning for Isabel
+(32, '2025-01-04 10:00:00', 6, 9),   -- Saturday Spinning for Elena
 
 -- Pilates reservations
-(4, '2025-01-17 09:45:00', 9, 2),    -- Tuesday morning Pilates for María
-(5, '2025-01-17 17:45:00', 10, 6),   -- Tuesday evening Pilates for Elena
-(6, '2025-01-18 09:50:00', 11, 9),   -- Wednesday morning Pilates for Carlos
-(7, '2025-01-18 17:40:00', 12, 10),  -- Wednesday evening Pilates for Isabel
-(8, '2025-01-19 09:45:00', 13, 2),   -- Thursday morning Pilates for María
-(9, '2025-01-19 17:45:00', 14, 3),   -- Thursday evening Pilates for José
-(10, '2025-01-22 09:50:00', 19, 7),  -- Sunday morning Pilates for Roberto
+(4, '2025-01-03 10:00:00', 16, 2),    -- Tuesday morning Pilates for María
+(5, '2025-01-03 10:00:00', 16, 6),   -- Tuesday evening Pilates for Elena
+(6, '2025-01-03 17:00:00', 16, 9),   -- Wednesday morning Pilates for Carlos
+(7, '2025-01-03 17:00:00', 12, 10),  -- Wednesday evening Pilates for Isabel
+(8, '2025-01-03 17:00:00', 13, 2),   -- Thursday morning Pilates for María
+(9, '2025-01-04 17:00:00', 14, 3),   -- Thursday evening Pilates for José
+(10, '2025-01-04 17:00:00', 19, 7),  -- Sunday morning Pilates for Roberto
 
 -- HIIT reservations
 (11, '2025-01-17 17:45:00', 22, 1),  -- Tuesday HIIT for Pedro
@@ -138,10 +140,10 @@ INSERT INTO public.reservas (id, fecha, actividad_id, socio_id) VALUES
 (15, '2025-01-21 17:45:00', 26, 2),  -- Saturday HIIT for María
 
 -- Crossfit reservations
-(16, '2025-01-17 09:15:00', 29, 3),  -- Tuesday morning Crossfit for José
-(17, '2025-01-17 19:45:00', 30, 7),  -- Tuesday evening Crossfit for Roberto
-(18, '2025-01-18 09:15:00', 31, 1),  -- Wednesday morning Crossfit for Pedro
-(19, '2025-01-18 19:45:00', 32, 2),  -- Wednesday evening Crossfit for María
+(16, '2025-01-04 20:00:00', 29, 3),  -- Tuesday morning Crossfit for José
+(17, '2025-01-04 20:00:00', 30, 7),  -- Tuesday evening Crossfit for Roberto
+(18, '2025-01-04 20:00:00', 31, 1),  -- Wednesday morning Crossfit for Pedro
+(19, '2025-01-04 20:00:00', 32, 2),  -- Wednesday evening Crossfit for María
 (20, '2025-01-19 09:15:00', 33, 6),  -- Thursday morning Crossfit for Elena
 (21, '2025-01-19 19:45:00', 34, 9),  -- Thursday evening Crossfit for Carlos
 (22, '2025-01-20 09:15:00', 35, 10), -- Friday morning Crossfit for Isabel

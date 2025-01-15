@@ -1,5 +1,6 @@
 package iwebgym.dto;
 
+import iwebgym.model.Socio;
 import lombok.Data;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +49,14 @@ public class SocioData {
         this.telefono = telefono;
         this.activo = activo;
 
+    }
+
+    public SocioData(Socio socio) {
+        this.id = socio.getId();
+        this.name = socio.getName();
+        this.email = socio.getEmail();
+        this.direccion = socio.getDireccion();
+        this.telefono = socio.getTelefono();
     }
 
     @Override

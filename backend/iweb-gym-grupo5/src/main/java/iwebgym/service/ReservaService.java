@@ -2,6 +2,7 @@ package iwebgym.service;
 
 import iwebgym.dto.ReservaData;
 import iwebgym.dto.ReservaRequest;
+import iwebgym.dto.SocioData;
 import iwebgym.dto.StringIntTuple;
 import iwebgym.model.*;
 import iwebgym.repository.ActividadRepository;
@@ -98,6 +99,23 @@ public class ReservaService {
 
         reserva.setId(nextId);
         return reservaRepository.save(reserva);
+    }
+
+    public List<SocioData> getAsistentes(Long actividadId, String date) {
+        LocalDate activityDate = LocalDate.parse(date);
+        java.util.Date startDate = java.util.Date.from(activityDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        java.util.Date endDate = java.util.Date.from(activityDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        List<Socio> socios = reservaRepository.findByActividadIdAndFechaBetween(actividadId, startDate, endDate)
+                .stream()
+                .map(Reserva::getSocio)
+                .collect(Collectors.toList());
+
+        List<SocioData> socioDataList = socios.stream()
+                .map(SocioData::new)
+                .collect(Collectors.toList());
+
+        return socioDataList;
     }
 
 
