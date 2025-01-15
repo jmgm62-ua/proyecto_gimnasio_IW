@@ -97,7 +97,14 @@ const router = createRouter({
       component: () => import('../views/ListadoSolicitudesSocio.vue'),
       meta: { requiresAuth: true }
     },
-    
+    {
+      path: '/activar-desactivar-perfiles',
+      name: 'listado-socios',
+      component: () => import('../views/GestionUusarios.vue'),
+      meta: { requiresAuth: true }
+    },
+
+
   ],
 })
 

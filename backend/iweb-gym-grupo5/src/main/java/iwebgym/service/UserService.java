@@ -280,6 +280,18 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
         socio.setActivo(true);
         socio.setFechaAlta(LocalDate.now().toString());
+        socio.setFechaBaja(null);
+        socioRepository.save(socio);
+    }
+
+    @Transactional
+    public void desactivarSocio(Long id) {
+        System.out.println("ID recibido: " + id);
+        Socio socio = socioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+        socio.setActivo(false);
+        socio.setFechaBaja(LocalDate.now().toString());
+        socio.setFechaAlta(null);
         socioRepository.save(socio);
     }
 
@@ -289,5 +301,25 @@ public class UserService {
             throw new RuntimeException("Socio no encontrado");
         }
         socioRepository.deleteById(id);
+    }
+
+
+    public List<SocioData> getAllSocios() {
+        return socioRepository.findAllbutNotSolicitudes()
+                .stream()
+                .map(socio -> new SocioData(
+                        socio.getId(),
+                        socio.getName(),
+                        socio.getEmail(),
+                        socio.getTipoCuota(),
+                        socio.getFechaAlta(),
+                        socio.getFechaBaja(),
+                        socio.getSaldo(),
+                        socio.getInscripcion().getTipoSuscripcion(),
+                        socio.getDireccion(),
+                        socio.getFechaNacimiento(),
+                        socio.getTelefono(),
+                        socio.getActivo()))
+                .collect(Collectors.toList());
     }
 }
