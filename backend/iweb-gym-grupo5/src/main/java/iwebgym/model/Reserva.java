@@ -13,7 +13,6 @@ import java.util.Date;
 public class Reserva {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Date fecha;
@@ -30,8 +29,6 @@ public class Reserva {
 
     }
 
-
-
     public Reserva(Date fecha, Actividad actividad, Socio socio) {
         this.fecha = fecha;
         this.actividad = actividad;
@@ -46,5 +43,9 @@ public class Reserva {
     public void removeSocio(Socio socio) {
         this.socio = null;
         socio.getReservas().remove(this);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
