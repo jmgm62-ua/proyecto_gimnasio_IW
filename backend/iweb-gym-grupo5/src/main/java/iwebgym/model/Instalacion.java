@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "instalaciones")
 public class Instalacion {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nombre;
