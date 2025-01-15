@@ -1,6 +1,7 @@
 package iwebgym.service;
 
 import iwebgym.dto.SuscripcionDTO;
+import iwebgym.model.Actividad;
 import iwebgym.model.Suscripcion;
 import iwebgym.repository.SuscripcionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,18 @@ public class SuscripcionService {
             throw new IllegalArgumentException("Ya existe una suscripción con ese nombre");
         }
 
+        Long nextId = 1L; // Valor por defecto si no hay reservas
+        List<Suscripcion> allSuscripciones = suscripcionRepository.findAll();
+        if (!allSuscripciones.isEmpty()) {
+            Long maxId = allSuscripciones.stream()
+                    .mapToLong(Suscripcion::getId)
+                    .max()
+                    .orElse(0L);
+            nextId = maxId + 1;
+        }
+
         Suscripcion suscripcion = convertToEntity(suscripcionDTO);
+        suscripcion.setId(nextId);
         suscripcion = suscripcionRepository.save(suscripcion);
         return convertToDTO(suscripcion);
     }

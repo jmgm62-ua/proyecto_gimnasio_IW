@@ -1,5 +1,6 @@
 package iwebgym.service;
 
+import iwebgym.model.Ingreso;
 import iwebgym.model.Moroso;
 import iwebgym.model.Socio;
 import iwebgym.model.Suscripcion;
@@ -48,6 +49,17 @@ public class CuotaService {
             String fechaMesAño = currentDate.format(formatter);
 
             nuevoMoroso.setMensualidad_no_pagada(fechaMesAño);
+
+            Long nextId = 1L; // Valor por defecto si no hay reservas
+            List<Moroso> allMorosos = morosoRepository.findAll();
+            if (!allMorosos.isEmpty()) {
+                Long maxId = allMorosos.stream()
+                        .mapToLong(Moroso::getId)
+                        .max()
+                        .orElse(0L);
+                nextId = maxId + 1;
+            }
+            nuevoMoroso.setId(nextId);
 
             morosoRepository.save(nuevoMoroso);
             socio.setActivo(false);
