@@ -195,10 +195,21 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{id}/desactivar")
+    public ResponseEntity<Void> desactivarSocio(@PathVariable Long id) {
+        userService.desactivarSocio(id);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarSocio(@PathVariable Long id) {
         userService.eliminarSocio(id);
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/socios")
+    public ResponseEntity<List<SocioData>> getAllSocios() {
+        List<SocioData> sociosPendientes = userService.getAllSocios();
+        return ResponseEntity.ok(sociosPendientes);
     }
 
 }

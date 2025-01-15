@@ -31,4 +31,7 @@ public interface SocioRepository extends JpaRepository<Socio, Long> {
     @Query("SELECT s FROM Socio s WHERE s.activo = false AND s.fechaAlta IS NULL")
     List<Socio> findInactiveSociosWithoutFechaAlta();
 
+    @Query("SELECT s FROM Socio s WHERE s.fechaAlta IS NOT NULL")
+    List<Socio> findAllbutNotSolicitudes();
+
 }

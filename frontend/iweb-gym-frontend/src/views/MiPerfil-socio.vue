@@ -81,6 +81,13 @@
                   Modificar tipo de suscripción
                 </router-link>
               </div>
+
+              <div class="text-center mt-4">
+                <button @click="darDeBaja" class="btn btn-danger">
+                  Darme de Baja
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
@@ -169,13 +176,25 @@ export default {
       }
     },
 
+    async darDeBaja() {
+      try {
+        await axios.put(`http://localhost:8080/users/${this.userData.id}/desactivar`, {}, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
 
+        alert('Usuario dado de baja con éxito');
+        this.$router.push('/');
+      } catch (error) {
+        console.error('Error al desactivar el usuario:', error);
+        alert('No se pudo dar de baja al usuario.');
+      }
+    },
   },
   mounted() {
     this.fetchUserData();
   },
   setup() {
-    const router = useRouter(); // Inicializa el router aquí y lo haces accesible
+    const router = useRouter();
     return { router };
   },
 };

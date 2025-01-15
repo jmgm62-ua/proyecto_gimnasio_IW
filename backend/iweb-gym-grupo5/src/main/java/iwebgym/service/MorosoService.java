@@ -75,6 +75,7 @@ public class MorosoService {
         if (socioOpt.isPresent()) {
             Socio socio = socioOpt.get();
             socio.setActivo(false);
+            socio.setFechaBaja(LocalDate.now().toString());
             socioRepository.save(socio);
         } else {
             throw new RuntimeException("Socio no encontrado");
