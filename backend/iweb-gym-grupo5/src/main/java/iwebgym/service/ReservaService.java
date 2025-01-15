@@ -71,7 +71,7 @@ public class ReservaService {
         socioRepository.save(socio);
 
         //Comprobar cual es el ultimo id de reserva
-        Long nextId = 1L; // Valor por defecto si no hay socios
+        Long nextId = 1L; // Valor por defecto si no hay reservas
         List<Reserva> allReservas = reservaRepository.findAll();
         if (!allReservas.isEmpty()) {
             Long maxId = allReservas.stream()
