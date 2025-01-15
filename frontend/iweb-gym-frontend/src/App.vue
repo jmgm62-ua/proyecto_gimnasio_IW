@@ -83,6 +83,12 @@ export default {
         case 'LOGIN_OK_SOCIO':
           router.push('/socio-profile')
           break;
+        case 'LOGIN_OK_WEBMASTER':
+          router.push('/webmaster-profile')
+          break;
+        case 'LOGIN_OK_MONITOR':
+          router.push('/monitor-profile')
+          break;
       }
     };
     const goToRequest = () => {
