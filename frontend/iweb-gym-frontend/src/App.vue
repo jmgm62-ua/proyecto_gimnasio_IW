@@ -25,7 +25,7 @@
             </li>
 
             <li class="nav-item" >
-              <button class="nav-link" v-if="isLoggedIn" @click="goToReservar">Realizar reserva</button>
+              <button class="nav-link" v-if="isLoggedIn && isSocio" @click="goToReservar">Realizar reserva</button>
             </li>
 
             <li class="nav-item" >
@@ -64,6 +64,7 @@ export default {
     const router = useRouter();
     const userStore = useUserStore();
     const isLoggedIn = computed(() => userStore.isLoggedIn);
+    const isSocio = computed(() => userStore.userType === 'LOGIN_OK_SOCIO');
 
     const goToLogin = () => {
       router.push("/login");
@@ -98,6 +99,7 @@ export default {
 
     return {
       isLoggedIn,
+      isSocio,
       goToLogin,
       goToLogOut,
       goToMiPerfil,
