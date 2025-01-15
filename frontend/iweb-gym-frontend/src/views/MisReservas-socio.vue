@@ -153,6 +153,7 @@ const calendarOptions = computed(() => ({
   plugins: [dayGridPlugin, bootstrap5Plugin],
   initialView: 'dayGridMonth',
   locale: esLocale,
+  timeZone: 'Europe/Madrid', // Configuración de la zona horaria
   events: calendarEvents.value,
   themeSystem: 'bootstrap5',
   headerToolbar: {
@@ -166,7 +167,7 @@ const calendarOptions = computed(() => ({
     const status = info.event.extendedProps.status;
     const statusText = status === 'pendiente' ? 'Pendiente' : 'Completada';
     const statusClass = status === 'pendiente' ? 'warning' : 'success';
-    
+
     const toast = new bootstrap.Toast(document.createElement('div'));
     toast._element.className = `toast align-items-center text-white bg-${statusClass} border-0`;
     toast._element.innerHTML = `
