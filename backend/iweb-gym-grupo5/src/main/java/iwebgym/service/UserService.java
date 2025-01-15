@@ -231,6 +231,20 @@ public class UserService {
         nuevo_ingreso.setCantidad(new BigDecimal(nuevo_saldo));
         nuevo_ingreso.setReferencia(referencia);
 
+
+        Long nextId = 1L; // Valor por defecto si no hay reservas
+        List<Ingreso> allIngresos = ingresoRepository.findAll();
+        if (!allIngresos.isEmpty()) {
+            Long maxId = allIngresos.stream()
+                    .mapToLong(Ingreso::getId)
+                    .max()
+                    .orElse(0L);
+            nextId = maxId + 1;
+        }
+
+        nuevo_ingreso.setId(nextId);
+
+
         ingresoRepository.save(nuevo_ingreso);
         float saldo_actual = socio_a_cargar_saldo.getSaldo();
         socio_a_cargar_saldo.setSaldo(saldo_actual + nuevo_saldo);
@@ -253,6 +267,18 @@ public class UserService {
 
         IngresoPendiente ingresoPendiente = new IngresoPendiente();
         ingresoPendiente.setReferencia(referencia);
+
+        Long nextId = 1L; // Valor por defecto si no hay reservas
+        List<Ingreso> allIngresos = ingresoRepository.findAll();
+        if (!allIngresos.isEmpty()) {
+            Long maxId = allIngresos.stream()
+                    .mapToLong(Ingreso::getId)
+                    .max()
+                    .orElse(0L);
+            nextId = maxId + 1;
+        }
+
+        ingresoPendiente.setId(nextId);
 
         ingresoPendienteRepository.save(ingresoPendiente);
 

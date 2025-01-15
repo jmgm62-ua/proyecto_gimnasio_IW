@@ -119,10 +119,21 @@ public class ActividadesService {
             throw new RuntimeException("El monitor seleccionado no existe");
         }
 
+        Long nextId = 1L; // Valor por defecto si no hay reservas
+        List<Actividad> allActividades = actividadRepository.findAll();
+        if (!allActividades.isEmpty()) {
+            Long maxId = allActividades.stream()
+                    .mapToLong(Actividad::getId)
+                    .max()
+                    .orElse(0L);
+            nextId = maxId + 1;
+        }
+
         // Crear la actividad
         Actividad actividad = modelMapper.map(actividadData, Actividad.class);
         actividad.setMonitor(monitor.get());
         actividad.setInstalacion(instalacion.get());
+        actividad.setId(nextId);
 
         // Establecer el tipo de actividad
         Optional<TipoActividad> tipoActividad = tipoActividadRepository.findById(actividadData.getTipoActividadId());
