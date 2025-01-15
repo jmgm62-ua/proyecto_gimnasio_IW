@@ -5,6 +5,7 @@ import iwebgym.model.Actividad;
 import iwebgym.model.Socio;
 import iwebgym.model.User;
 import iwebgym.service.ActividadesService;
+import iwebgym.service.CuotaService;
 import iwebgym.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private ActividadesService actividadesService;
+    @Autowired
+    private CuotaService cuotaService;
 
 
     @GetMapping
@@ -147,6 +150,8 @@ public class UserController {
         }
     }
 
+
+
     @GetMapping("/cargar_saldo/{referencia}/{saldo_a_cargar}/{email}")
     public ResponseEntity<?> cargarSaldo(
             @PathVariable String referencia,
@@ -212,4 +217,11 @@ public class UserController {
         return ResponseEntity.ok(sociosPendientes);
     }
 
+
+
+    @GetMapping("/cobrar")
+    public ResponseEntity<?> cobrar() {
+        cuotaService.descontarCuota();
+        return ResponseEntity.ok("Cobrado");
+    }
 }

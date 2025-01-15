@@ -50,12 +50,7 @@
                     Añadir Nueva Actividad
                   </router-link>
                 </div>
-  
-                <div class="text-center mt-4">
-                  <router-link to="/asistentes-a-clase" class="btn btn-primary">
-                    Ver asistentes a mis clases
-                  </router-link>
-                </div>
+                
               </div>
             </div>
           </div>
