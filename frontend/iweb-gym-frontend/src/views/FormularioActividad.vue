@@ -171,7 +171,12 @@ export default {
         instalacionId: '',
         monitorId: ''
       },
-      tiposActividad: [],
+      tiposActividad: [
+        { id: 0, nombre: 'Spinning' },
+        { id: 1, nombre: 'Crossfit' },
+        { id: 2, nombre: 'Pilates' },
+        { id: 3, nombre: 'HIIT' }
+      ],
       instalaciones: [],
       monitores: [],
       mensaje: null
@@ -179,24 +184,11 @@ export default {
   },
 
   async created() {
-    await this.cargarTiposActividad();
     await this.cargarInstalaciones();
     await this.cargarMonitores();
   },
 
   methods: {
-    async cargarTiposActividad() {
-      try {
-        const response = await axios.get('http://localhost:8080/tipos-actividad');
-        this.tiposActividad = response.data;
-      } catch (error) {
-        console.error('Error al cargar tipos de actividad:', error);
-        this.mensaje = {
-          tipo: 'error',
-          texto: 'Error al cargar los tipos de actividad'
-        };
-      }
-    },
 
     async cargarInstalaciones() {
       try {
