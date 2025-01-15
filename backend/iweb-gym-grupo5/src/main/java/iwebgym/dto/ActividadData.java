@@ -24,7 +24,7 @@ public class ActividadData {
     public String tipo_de_actividad;
     public double precio_extra_actividad;
 
-    public ActividadData(Long id, String nombre, String diaSemana, String horaInicio, String horaFin, Date fechaInicio, Date fechaFin) {
+    public ActividadData(Long id, String nombre, String diaSemana, String horaInicio, String horaFin, Date fechaInicio, Date fechaFin, String tipo_de_actividad, double precio_extra_actividad) {
         this.id = id;
         this.nombre = nombre;
         this.diaSemana = diaSemana;
@@ -32,6 +32,8 @@ public class ActividadData {
         this.horaFin = horaFin;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.tipo_de_actividad = tipo_de_actividad;
+        this.precio_extra_actividad = precio_extra_actividad;
     }
 
     public ActividadData() {
