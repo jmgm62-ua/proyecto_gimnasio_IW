@@ -1,9 +1,7 @@
 version: '3.8'
 services:
   app:
-    build:
-      context: ./backend/iweb-gym-grupo5
-      dockerfile: Dockerfile
+    image: arr140/iweb-backend:latest
     container_name: springboot-app
     ports:
       - "8080:8080"
@@ -18,9 +16,7 @@ services:
       - spring-postgres
 
   frontend:
-    build:
-      context: ./frontend/iweb-gym-frontend
-      dockerfile: Dockerfile
+    image: arr140/iweb-frontend:latest
     container_name: vue-frontend
     ports:
       - "5173:5173"  # Map port 5173 to host
